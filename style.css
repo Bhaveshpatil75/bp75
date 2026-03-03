@@ -112,6 +112,17 @@ body {
         max-width: 600px;
     }
 
+    .hero-avatar {
+        width: clamp(120px, 14vw, 180px);
+        margin-top: 1.5rem;
+        opacity: 0.55;
+    }
+
+    .hero-avatar svg {
+        width: 100%;
+        height: auto;
+    }
+
     .hero-spacer {
         /* Subtle empty space below for future cinematic intro animation */
         height: 12vh;

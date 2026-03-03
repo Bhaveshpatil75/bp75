@@ -262,4 +262,108 @@ document.addEventListener('DOMContentLoaded', () => {
         resizeCanvas();
         animate();
     }
+
+    // --- Cinematic Magnetic Cursor Interactions ---
+    // Elements subtly drift toward the cursor when hovered, like they're aware of presence.
+    if (typeof gsap !== 'undefined') {
+        const magneticElements = document.querySelectorAll('.project-panel, .contact-link');
+
+        magneticElements.forEach((el) => {
+            // Promote to GPU layer for smooth transform without layout shift
+            el.style.willChange = 'transform';
+
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                // Cursor position relative to element center (-1 to 1 range)
+                const relX = (e.clientX - rect.left) / rect.width - 0.5;
+                const relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+                // Max 8px displacement toward cursor
+                gsap.to(el, {
+                    x: relX * 16,  // -0.5 to 0.5 × 16 = -8 to 8px
+                    y: relY * 16,
+                    duration: 0.4,
+                    ease: 'power2.out',
+                    overwrite: 'auto'
+                });
+            });
+
+            el.addEventListener('mouseleave', () => {
+                gsap.to(el, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.7,
+                    ease: 'power2.out',
+                    overwrite: 'auto'
+                });
+            });
+        });
+    }
+
+    // --- Subtle Eye-Tracking Interaction ---
+    // Pupils follow the cursor with smooth, limited movement.
+    if (typeof gsap !== 'undefined') {
+        const pupilLeft = document.getElementById('pupil-left');
+        const pupilRight = document.getElementById('pupil-right');
+        const avatarSvg = document.querySelector('.hero-avatar svg');
+
+        if (pupilLeft && pupilRight && avatarSvg) {
+            // Eye centers in SVG coordinate space (from the viewBox)
+            const leftEyeCenter = { cx: 42, cy: 36 };
+            const rightEyeCenter = { cx: 118, cy: 36 };
+            const maxOffset = 7; // Max pupil offset in SVG units — keeps r=6 pupil inside almond eye
+
+            function updatePupils(mouseX, mouseY) {
+                const svgRect = avatarSvg.getBoundingClientRect();
+                // Convert screen coords to SVG viewBox coords
+                // viewBox is 0 0 160 80, element has svgRect dimensions
+                const scaleX = 160 / svgRect.width;
+                const scaleY = 80 / svgRect.height;
+                const svgMouseX = (mouseX - svgRect.left) * scaleX;
+                const svgMouseY = (mouseY - svgRect.top) * scaleY;
+
+                [
+                    { el: pupilLeft, center: leftEyeCenter },
+                    { el: pupilRight, center: rightEyeCenter }
+                ].forEach(({ el, center }) => {
+                    const dx = svgMouseX - center.cx;
+                    const dy = svgMouseY - center.cy;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    // Normalize and clamp to maxOffset
+                    const clampedDist = Math.min(dist, maxOffset * 8);
+                    const ratio = clampedDist > 0 ? maxOffset / Math.max(dist, maxOffset) : 0;
+                    const offsetX = dx * ratio;
+                    const offsetY = dy * ratio;
+
+                    gsap.to(el, {
+                        attr: { cx: center.cx + offsetX, cy: center.cy + offsetY },
+                        duration: 0.5,
+                        ease: 'power2.out',
+                        overwrite: 'auto'
+                    });
+                });
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                updatePupils(e.clientX, e.clientY);
+            });
+
+            // Return to center when cursor leaves the window
+            document.addEventListener('mouseleave', () => {
+                gsap.to(pupilLeft, {
+                    attr: { cx: leftEyeCenter.cx, cy: leftEyeCenter.cy },
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    overwrite: 'auto'
+                });
+                gsap.to(pupilRight, {
+                    attr: { cx: rightEyeCenter.cx, cy: rightEyeCenter.cy },
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    overwrite: 'auto'
+                });
+            });
+        }
+    }
 });
