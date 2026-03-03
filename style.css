@@ -1,0 +1,290 @@
+/* Color System & Variables */
+:root {
+    /* Deep noir background */
+    --bg-color: #0b0b0b;
+    /* Primary text color (faint grey/off-white for contrast but not harsh) */
+    --text-primary: #e0e0e0;
+    /* Secondary text / muted elements */
+    --text-secondary: #8c8c8c;
+    /* Charcoal tones for borders or subtle backgrounds */
+    --charcoal: #141414;
+    --charcoal-light: #1f1f1f;
+    /* Soft grey glow */
+    --glow-color: rgba(200, 200, 200, 0.08);
+
+    /* Typography */
+    --font-heading: 'Cormorant Garamond', serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0b0b0b;
+    /* Base Layer: Deep noir solid color */
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Ensure body establishes a positioning context and prevents overflow from scaled pseudo-elements */
+    position: relative;
+    min-height: 100vh;
+
+    /* Canvas Polygon Background */
+    #polygon-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -3;
+        /* Behind content and vignette */
+        pointer-events: none;
+        /* Let clicks pass through */
+    }
+
+    /* Layer 2: Static Vignette Overlay */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* Keep vignette to maintain the deep cinematic framing */
+        background: radial-gradient(circle at center, transparent 35%, #000000 110%);
+        z-index: -2;
+        pointer-events: none;
+    }
+
+    /* Typography elements */
+    h1,
+    h2,
+    h3 {
+        font-family: var(--font-heading);
+        font-weight: 400;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 6vw;
+    }
+
+    /* Hero Section */
+    .hero {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        padding: 0 6vw;
+    }
+
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .hero-title {
+        font-size: clamp(4rem, 12vw, 9rem);
+        letter-spacing: 0.05em;
+        color: #ffffff;
+        line-height: 1;
+    }
+
+    .hero-tagline {
+        font-size: clamp(0.9rem, 2vw, 1.25rem);
+        color: var(--text-secondary);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        max-width: 600px;
+    }
+
+    .hero-spacer {
+        /* Subtle empty space below for future cinematic intro animation */
+        height: 12vh;
+    }
+
+    /* Projects Section */
+    .projects-section {
+        padding: 8rem 0;
+    }
+
+    .section-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        color: var(--text-secondary);
+        margin-bottom: 5rem;
+        border-bottom: 1px solid var(--charcoal-light);
+        padding-bottom: 1.5rem;
+    }
+
+    .project-list {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+
+    /* Project Panel Layout */
+    .project-panel {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--charcoal);
+        padding: 4rem 3rem;
+        border: 1px solid var(--charcoal-light);
+        gap: 2rem;
+    }
+
+    /* Hover Accent (No transition as per requirements) */
+    .project-panel:hover {
+        box-shadow: 0 0 45px var(--glow-color);
+        border-color: #333333;
+        background-color: #181818;
+    }
+
+    @media (min-width: 768px) {
+        .project-panel {
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 5rem;
+            padding: 5rem 4rem;
+        }
+    }
+
+    .project-number {
+        font-family: var(--font-body);
+        font-size: 1rem;
+        color: var(--text-secondary);
+        letter-spacing: 0.1em;
+        padding-top: 0.5rem;
+    }
+
+    .project-info {
+        flex: 1;
+    }
+
+    .project-name {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+        letter-spacing: 0.02em;
+    }
+
+    .project-desc {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        max-width: 450px;
+    }
+
+    /* About Section */
+    .about-section {
+        padding: 8rem 0;
+    }
+
+    .about-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        max-width: 800px;
+    }
+
+    .about-text {
+        font-size: clamp(1.125rem, 2vw, 1.5rem);
+        color: var(--text-primary);
+        line-height: 1.8;
+    }
+
+    /* Skills Section */
+    .skills-section {
+        padding: 8rem 0;
+        background-color: var(--charcoal);
+        border-top: 1px solid var(--charcoal-light);
+        border-bottom: 1px solid var(--charcoal-light);
+    }
+
+    .skills-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+    }
+
+    @media (min-width: 768px) {
+        .skills-grid {
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+    }
+
+    .skill-group {
+        flex: 1;
+    }
+
+    .skill-heading {
+        font-size: 1.5rem;
+        color: var(--text-primary);
+        margin-bottom: 2rem;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--charcoal-light);
+        padding-bottom: 1rem;
+    }
+
+    .skill-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .skill-list li {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+    }
+
+    /* Contact Section */
+    .contact-section {
+        padding: 8rem 0 12rem;
+        text-align: center;
+    }
+
+    .contact-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .contact-desc {
+        font-size: clamp(1.25rem, 2.5vw, 2rem);
+        color: var(--text-secondary);
+        font-family: var(--font-heading);
+    }
+
+    .contact-link {
+        display: inline-block;
+        font-size: 1.25rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        border-bottom: 1px solid var(--text-primary);
+        padding-bottom: 0.5rem;
+        letter-spacing: 0.05em;
+    }
+
+    .contact-link:hover {
+        color: #ffffff;
+        border-color: #ffffff;
+    }
+}
