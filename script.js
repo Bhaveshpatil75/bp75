@@ -338,8 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     gsap.to(el, {
                         attr: { cx: center.cx + offsetX, cy: center.cy + offsetY },
-                        duration: 0.5,
-                        ease: 'power2.out',
+                        duration: 0.7,
+                        ease: 'power3.out',
                         overwrite: 'auto'
                     });
                 });
@@ -364,6 +364,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     overwrite: 'auto'
                 });
             });
+
+            // --- Natural Blinking System ---
+            const eyeLeft = document.getElementById('eye-left');
+            const eyeRight = document.getElementById('eye-right');
+            const clipPathL = document.getElementById('clip-path-l');
+            const clipPathR = document.getElementById('clip-path-r');
+
+            // SVG Path strings for open and closed states
+            const leftEyeOpen = 'M16 36 Q42 18 68 36 Q42 52 16 36Z';
+            const leftEyeClosed = 'M16 36 Q42 36 68 36 Q42 36 16 36Z';
+            const rightEyeOpen = 'M92 36 Q118 18 144 36 Q118 52 92 36Z';
+            const rightEyeClosed = 'M92 36 Q118 36 144 36 Q118 36 92 36Z';
+
+            if (eyeLeft && eyeRight && clipPathL && clipPathR) {
+                function blink() {
+                    const tl = gsap.timeline();
+
+                    // Close quickly
+                    tl.to([eyeLeft, clipPathL], { attr: { d: leftEyeClosed }, duration: 0.15, ease: 'power2.inOut' }, 0)
+                        .to([eyeRight, clipPathR], { attr: { d: rightEyeClosed }, duration: 0.15, ease: 'power2.inOut' }, 0)
+                        // Short pause (80ms), then open smoothly
+                        .to([eyeLeft, clipPathL], { attr: { d: leftEyeOpen }, duration: 0.2, ease: 'power2.out' }, '+=0.08')
+                        .to([eyeRight, clipPathR], { attr: { d: rightEyeOpen }, duration: 0.2, ease: 'power2.out' }, '<');
+
+                    // Schedule next blink (random between 1.5s and 4.5s)
+                    const nextBlink = 1500 + Math.random() * 3000;
+                    setTimeout(blink, nextBlink);
+                }
+
+                // Start first blink after 2s
+                setTimeout(blink, 2000);
+            }
         }
     }
 });

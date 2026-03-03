@@ -32,24 +32,31 @@
                             <stop offset="0%" stop-color="#8c8c8c" stop-opacity="0.08"/>
                             <stop offset="100%" stop-color="#8c8c8c" stop-opacity="0"/>
                         </radialGradient>
+                        <!-- Clip paths to hide pupils outside the eyes during blink -->
+                        <clipPath id="clip-eye-l">
+                            <path id="clip-path-l" d="M16 36 Q42 18 68 36 Q42 52 16 36Z" />
+                        </clipPath>
+                        <clipPath id="clip-eye-r">
+                            <path id="clip-path-r" d="M92 36 Q118 18 144 36 Q118 52 92 36Z" />
+                        </clipPath>
                     </defs>
                     <!-- Left eyebrow — thick tapered arc -->
                     <path d="M18 24 Q42 8 66 22 Q42 14 18 24Z" fill="#9a9a9a" opacity="0.45"/>
                     <!-- Left eye shadow -->
                     <ellipse cx="42" cy="48" rx="22" ry="10" fill="url(#eye-shadow-l)"/>
                     <!-- Left eye — big almond -->
-                    <path d="M16 36 Q42 18 68 36 Q42 52 16 36Z" stroke="#8c8c8c" stroke-width="1.2"/>
+                    <path id="eye-left" d="M16 36 Q42 18 68 36 Q42 52 16 36Z" stroke="#8c8c8c" stroke-width="1.2"/>
                     <!-- Left pupil -->
-                    <circle id="pupil-left" cx="42" cy="36" r="6" fill="#8c8c8c"/>
+                    <circle id="pupil-left" cx="42" cy="36" r="6" fill="#8c8c8c" clip-path="url(#clip-eye-l)"/>
 
                     <!-- Right eyebrow — thick tapered arc -->
                     <path d="M94 22 Q118 8 142 24 Q118 14 94 22Z" fill="#9a9a9a" opacity="0.45"/>
                     <!-- Right eye shadow -->
                     <ellipse cx="118" cy="48" rx="22" ry="10" fill="url(#eye-shadow-r)"/>
                     <!-- Right eye — big almond -->
-                    <path d="M92 36 Q118 18 144 36 Q118 52 92 36Z" stroke="#8c8c8c" stroke-width="1.2"/>
+                    <path id="eye-right" d="M92 36 Q118 18 144 36 Q118 52 92 36Z" stroke="#8c8c8c" stroke-width="1.2"/>
                     <!-- Right pupil -->
-                    <circle id="pupil-right" cx="118" cy="36" r="6" fill="#8c8c8c"/>
+                    <circle id="pupil-right" cx="118" cy="36" r="6" fill="#8c8c8c" clip-path="url(#clip-eye-r)"/>
                 </svg>
             </div>
         </div>
