@@ -36,6 +36,66 @@ body {
     /* Ensure body establishes a positioning context and prevents overflow from scaled pseudo-elements */
     position: relative;
     min-height: 100vh;
+}
+
+/* Cinematic Navigation */
+.site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 1.5rem 0;
+    background: rgba(11, 11, 11, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.site-nav.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    position: relative;
+}
+
+.nav-link {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+    color: var(--text-primary);
+}
+
+.nav-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    width: 0;
+    background-color: var(--text-secondary);
+    transition: none;
+    /* GSAP handles movement */
+    pointer-events: none;
+}
+
+body {
 
     /* Canvas Polygon Background */
     #polygon-bg {
@@ -155,13 +215,17 @@ body {
         padding: 4rem 3rem;
         border: 1px solid var(--charcoal-light);
         gap: 2rem;
+        transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
 
-    /* Hover Accent (No transition as per requirements) */
+    /* Cinematic Hover — layered depth with soft glow */
     .project-panel:hover {
-        box-shadow: 0 0 45px var(--glow-color);
-        border-color: #333333;
-        background-color: #181818;
+        background-color: #1a1a1a;
+        border-color: #2a2a2a;
+        box-shadow:
+            0 0 50px rgba(200, 200, 200, 0.04),
+            0 0 15px rgba(200, 200, 200, 0.02),
+            inset 0 1px 20px rgba(0, 0, 0, 0.35);
     }
 
     @media (min-width: 768px) {

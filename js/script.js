@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Cinematic Scroll Reveal System (ScrollTrigger) ---
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        gsap.registerPlugin(ScrollTrigger);
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
         // Sections to reveal on scroll
         const revealSections = document.querySelectorAll(
@@ -396,6 +396,80 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Start first blink after 2s
                 setTimeout(blink, 2000);
             }
+        }
+    }
+
+    // --- Cinematic Navigation System ---
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        const siteNav = document.getElementById('site-nav');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const navIndicator = document.querySelector('.nav-indicator');
+        const navLinksContainer = document.querySelector('.nav-links');
+
+        if (siteNav && navLinks.length > 0 && navIndicator) {
+
+            // --- 1. Show/hide nav based on scroll past hero ---
+            ScrollTrigger.create({
+                trigger: '.hero',
+                start: 'bottom 20%',
+                onEnterBack: () => siteNav.classList.remove('is-visible'),
+                onLeave: () => siteNav.classList.add('is-visible')
+            });
+
+            // --- 2. Move indicator to active link ---
+            function moveIndicator(link) {
+                if (!link) return;
+                const linkRect = link.getBoundingClientRect();
+                const containerRect = navLinksContainer.getBoundingClientRect();
+
+                gsap.to(navIndicator, {
+                    left: linkRect.left - containerRect.left,
+                    width: linkRect.width,
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
+            }
+
+            // --- 3. Active section detection via ScrollTrigger ---
+            const sectionIds = ['about', 'skills', 'projects', 'contact'];
+
+            sectionIds.forEach((id) => {
+                const section = document.getElementById(id);
+                if (!section) return;
+
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: 'top 50%',
+                    end: 'bottom 50%',
+                    onEnter: () => setActiveLink(id),
+                    onEnterBack: () => setActiveLink(id)
+                });
+            });
+
+            function setActiveLink(sectionId) {
+                navLinks.forEach(link => link.classList.remove('is-active'));
+                const activeLink = document.querySelector(`.nav-link[data-section="${sectionId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('is-active');
+                    moveIndicator(activeLink);
+                }
+            }
+
+            // --- 4. Smooth scroll on click ---
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-section');
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        gsap.to(window, {
+                            scrollTo: { y: targetSection, offsetY: 60 },
+                            duration: 1.2,
+                            ease: 'power2.inOut'
+                        });
+                    }
+                });
+            });
         }
     }
 });
