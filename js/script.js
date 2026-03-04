@@ -27,15 +27,142 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (viewBtn) viewBtn.href = data.resume.file;
             }
 
-            // Skills preview — first 7 skills as chips
+            // --- Interactive Skills Bubbles ---
             if (data.skills) {
                 const allSkills = Object.values(data.skills).flat();
-                const preview = allSkills.slice(0, 7);
-                const container = document.getElementById('skills-preview-list');
-                if (container) {
-                    container.innerHTML = preview
-                        .map(skill => `<span class="skill-chip">${skill}</span>`)
-                        .join('');
+                const preview = allSkills.slice(0, 8);
+                const area = document.getElementById('skills-bubble-area');
+
+                if (area && preview.length > 0) {
+                    const areaRect = area.getBoundingClientRect();
+                    const aW = area.offsetWidth;
+                    const aH = area.offsetHeight;
+                    const bubbles = [];
+
+                    // Create bubble elements and physics state
+                    preview.forEach((skill, i) => {
+                        const size = Math.max(60, skill.length * 7 + 20);
+                        const el = document.createElement('div');
+                        el.className = 'skill-bubble';
+                        el.textContent = skill;
+                        el.style.width = size + 'px';
+                        el.style.height = size + 'px';
+                        area.appendChild(el);
+
+                        const r = size / 2;
+                        // Spread bubbles semi-randomly within the container
+                        const cx = r + Math.random() * (aW - size);
+                        const cy = r + Math.random() * (aH - size);
+
+                        bubbles.push({
+                            el, r, x: cx, y: cy,
+                            vx: (Math.random() - 0.5) * 0.3,
+                            vy: (Math.random() - 0.5) * 0.3,
+                            dragging: false
+                        });
+                    });
+
+                    // Physics loop
+                    function simulateBubbles() {
+                        const w = area.offsetWidth;
+                        const h = area.offsetHeight;
+                        const centerX = w / 2;
+                        const centerY = h / 2;
+
+                        bubbles.forEach(b => {
+                            if (b.dragging) return;
+
+                            // Gentle drift toward center
+                            b.vx += (centerX - b.x) * 0.0003;
+                            b.vy += (centerY - b.y) * 0.0003;
+
+                            // Damping
+                            b.vx *= 0.98;
+                            b.vy *= 0.98;
+
+                            b.x += b.vx;
+                            b.y += b.vy;
+
+                            // Boundary collision
+                            if (b.x - b.r < 0) { b.x = b.r; b.vx *= -0.5; }
+                            if (b.x + b.r > w) { b.x = w - b.r; b.vx *= -0.5; }
+                            if (b.y - b.r < 0) { b.y = b.r; b.vy *= -0.5; }
+                            if (b.y + b.r > h) { b.y = h - b.r; b.vy *= -0.5; }
+                        });
+
+                        // Bubble–bubble collision
+                        for (let i = 0; i < bubbles.length; i++) {
+                            for (let j = i + 1; j < bubbles.length; j++) {
+                                const a = bubbles[i], b = bubbles[j];
+                                const dx = b.x - a.x;
+                                const dy = b.y - a.y;
+                                const dist = Math.sqrt(dx * dx + dy * dy);
+                                const minDist = a.r + b.r;
+
+                                if (dist < minDist && dist > 0) {
+                                    const overlap = (minDist - dist) / 2;
+                                    const nx = dx / dist;
+                                    const ny = dy / dist;
+
+                                    if (!a.dragging) { a.x -= nx * overlap; a.y -= ny * overlap; }
+                                    if (!b.dragging) { b.x += nx * overlap; b.y += ny * overlap; }
+
+                                    // Exchange velocity component along collision normal
+                                    const dvx = a.vx - b.vx;
+                                    const dvy = a.vy - b.vy;
+                                    const dot = dvx * nx + dvy * ny;
+                                    if (dot > 0) {
+                                        if (!a.dragging) { a.vx -= dot * nx * 0.4; a.vy -= dot * ny * 0.4; }
+                                        if (!b.dragging) { b.vx += dot * nx * 0.4; b.vy += dot * ny * 0.4; }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Render
+                        bubbles.forEach(b => {
+                            b.el.style.left = (b.x - b.r) + 'px';
+                            b.el.style.top = (b.y - b.r) + 'px';
+                        });
+
+                        requestAnimationFrame(simulateBubbles);
+                    }
+
+                    simulateBubbles();
+
+                    // --- Drag interaction ---
+                    bubbles.forEach(b => {
+                        let lastX, lastY;
+
+                        b.el.addEventListener('pointerdown', (e) => {
+                            e.preventDefault();
+                            b.dragging = true;
+                            b.vx = 0; b.vy = 0;
+                            b.el.classList.add('is-dragging');
+                            b.el.setPointerCapture(e.pointerId);
+                            const rect = area.getBoundingClientRect();
+                            lastX = e.clientX - rect.left;
+                            lastY = e.clientY - rect.top;
+                        });
+
+                        b.el.addEventListener('pointermove', (e) => {
+                            if (!b.dragging) return;
+                            const rect = area.getBoundingClientRect();
+                            const mx = e.clientX - rect.left;
+                            const my = e.clientY - rect.top;
+                            b.vx = (mx - lastX) * 0.3;
+                            b.vy = (my - lastY) * 0.3;
+                            b.x = mx;
+                            b.y = my;
+                            lastX = mx;
+                            lastY = my;
+                        });
+
+                        b.el.addEventListener('pointerup', () => {
+                            b.dragging = false;
+                            b.el.classList.remove('is-dragging');
+                        });
+                    });
                 }
             }
         } catch (err) {
@@ -195,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const config = {
             numLines: 12,
             speed: 0.85,      // Matches previous movement speed
-            lineAlpha: 0.1   // Faint line visibility
+            lineAlpha: 0.08   // Faint line visibility
         };
 
         function resizeCanvas() {
