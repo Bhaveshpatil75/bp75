@@ -3,6 +3,48 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Cinematic Noir Portfolio loaded.');
 
+    // --- Data Loader: Populate content from JSON ---
+    async function loadPortfolioData() {
+        try {
+            const response = await fetch('data/data.json');
+            if (!response.ok) throw new Error('Failed to load data');
+            const data = await response.json();
+
+            // Hero content
+            const heroName = document.getElementById('hero-name');
+            const heroTitle = document.getElementById('hero-title');
+            const heroTagline = document.getElementById('hero-tagline');
+
+            if (data.personal) {
+                if (heroName && data.personal.name) heroName.textContent = data.personal.name;
+                if (heroTitle && data.personal.title) heroTitle.textContent = data.personal.title;
+                if (heroTagline && data.personal.tagline) heroTagline.textContent = data.personal.tagline;
+            }
+
+            // Resume button
+            if (data.resume && data.resume.file) {
+                const viewBtn = document.getElementById('btn-view-resume');
+                if (viewBtn) viewBtn.href = data.resume.file;
+            }
+
+            // Skills preview — first 7 skills as chips
+            if (data.skills) {
+                const allSkills = Object.values(data.skills).flat();
+                const preview = allSkills.slice(0, 7);
+                const container = document.getElementById('skills-preview-list');
+                if (container) {
+                    container.innerHTML = preview
+                        .map(skill => `<span class="skill-chip">${skill}</span>`)
+                        .join('');
+                }
+            }
+        } catch (err) {
+            console.warn('Portfolio data could not be loaded. Using fallback HTML content.', err);
+        }
+    }
+
+    loadPortfolioData();
+
     // Select Hero elements
     const heroTitle = document.querySelector('.hero-title');
     const heroTagline = document.querySelector('.hero-tagline');
@@ -101,6 +143,43 @@ document.addEventListener('DOMContentLoaded', () => {
                     toggleActions: 'play reverse play reverse'
                 }
             });
+        }
+    }
+    // --- Cinematic Hero Scroll Depth (Subtle Parallax) ---
+    // Three layers at slightly different scroll speeds create depth illusion.
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        const hero = document.querySelector('.hero');
+        const heroAvatar = document.querySelector('.hero-avatar');
+        const polygonBg = document.getElementById('polygon-bg');
+
+        if (hero) {
+            // Background: moves slower (lags ~10%)
+            if (polygonBg) {
+                gsap.to(polygonBg, {
+                    yPercent: 8,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: hero,
+                        start: 'top top',
+                        end: 'bottom top',
+                        scrub: true
+                    }
+                });
+            }
+
+            // Avatar eyes: moves slightly slower than text (lags ~5%)
+            if (heroAvatar) {
+                gsap.to(heroAvatar, {
+                    yPercent: 15,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: hero,
+                        start: 'top top',
+                        end: 'bottom top',
+                        scrub: true
+                    }
+                });
+            }
         }
     }
 

@@ -27,8 +27,9 @@
     
     <header class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Bhavesh Patil</h1>
-            <p class="hero-tagline">Software Developer.</p>
+            <h1 class="hero-title" id="hero-name">Bhavesh Patil</h1>
+            <p class="hero-tagline" id="hero-title">Software Developer.</p>
+            <p class="hero-subtitle" id="hero-tagline"></p>
 
             <!-- Minimal Noir Avatar -->
             <div class="hero-avatar">
@@ -70,11 +71,22 @@
                     <circle id="pupil-right" cx="118" cy="36" r="6" fill="#8c8c8c" clip-path="url(#clip-eye-r)"/>
                 </svg>
             </div>
+            <div class="hero-actions">
+                <a href="#" class="hero-btn" id="btn-view-resume" target="_blank">View Resume</a>
+            </div>
         </div>
         <div class="hero-spacer"></div>
     </header>
 
     <main>
+        <!-- Interactive Skills Bubbles -->
+        <section class="skills-preview">
+            <div class="container">
+                <div class="skills-bubble-area" id="skills-bubble-area"></div>
+                <a href="#skills" class="skills-preview-btn">Explore Skills →</a>
+            </div>
+        </section>
+
         <section id="about" class="about-section">
             <div class="container">
                 <h2 class="section-title">About the Shadows</h2>

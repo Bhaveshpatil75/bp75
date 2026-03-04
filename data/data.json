@@ -1,0 +1,151 @@
+{
+    "personal": {
+        "name": "Bhavesh Patil",
+        "title": "Software Developer",
+        "tagline": "Passionate about building impactful software and solving real-world problems."
+    },
+    "resume": {
+        "file": "assets/resume/Bhavesh_Patil_Resume.pdf"
+    },
+    "skills": {
+        "Languages & Frameworks": [
+            "Java",
+            "Python",
+            "Dart",
+            "Spring Boot",
+            "Django",
+            "Flutter"
+        ],
+        "Databases & Tools": [
+            "MySQL",
+            "MongoDB",
+            "Firebase",
+            "Docker",
+            "Git",
+            "GitHub",
+            "Postman",
+            "n8n"
+        ],
+        "Core Concepts": [
+            "Data Structures",
+            "Object-Oriented Programming",
+            "Operating Systems"
+        ]
+    },
+    "projects": [
+        {
+            "name": "LumosCareer",
+            "description": "Web application for career guidance and interview preparation developed using Django, HTML, CSS, n8n, and LiveKit. Generates candidate–company compatibility reports and provides real-time interview simulations through an AI voice agent.",
+            "tech": [
+                "Django",
+                "HTML",
+                "CSS",
+                "n8n",
+                "LiveKit"
+            ],
+            "demo": "",
+            "github": ""
+        },
+        {
+            "name": "ChariotOfColors",
+            "description": "Web application developed using Spring Boot, Hibernate, HTML, and CSS for the online sale of artworks and paintings for a family-run business.",
+            "tech": [
+                "Spring Boot",
+                "Hibernate",
+                "HTML",
+                "CSS"
+            ],
+            "demo": "",
+            "github": ""
+        },
+        {
+            "name": "AgriGenie",
+            "description": "Mobile application for smart agriculture built using Flutter, Firebase, and Firestore. Supports farm and crop management with AI-based suggestions from text and image inputs along with location-based weather forecasting.",
+            "tech": [
+                "Flutter",
+                "Firebase",
+                "Firestore"
+            ],
+            "demo": "",
+            "github": ""
+        }
+    ],
+    "experience": [
+        {
+            "role": "SDE Intern",
+            "company": "IDZ Digital Private Limited",
+            "duration": "Dec 2024 – Mar 2025",
+            "description": "Developed and debugged multiple applications, collaborated with senior developers, and contributed to the successful publication of the 'Learn Languages' app on the Google Play Store.",
+            "links": {
+                "certificate": "",
+                "company": ""
+            }
+        },
+        {
+            "role": "SDE Intern",
+            "company": "Pragament Tech Solutions Private Limited",
+            "duration": "Nov 2024 – Feb 2025",
+            "description": "Worked on four organizational GitHub projects by resolving assigned issues, implementing code fixes, and creating pull requests in collaboration with the development team.",
+            "links": {
+                "certificate": "",
+                "company": ""
+            }
+        }
+    ],
+    "achievements": [
+        {
+            "title": "Blind Coding — First Prize",
+            "organization": "GDSC, SKNCOE",
+            "date": "Jan 2024",
+            "link": ""
+        },
+        {
+            "title": "Beat the Bug & Code Bingo — First Prize",
+            "organization": "CDGI, Indore",
+            "date": "Feb 2024",
+            "link": ""
+        },
+        {
+            "title": "Code Hunt — Second Prize",
+            "organization": "ACE, SKNCOE",
+            "date": "Apr 2024",
+            "link": ""
+        },
+        {
+            "title": "Member — IEEE App Development Team",
+            "organization": "SKNISB",
+            "date": "2024",
+            "link": ""
+        },
+        {
+            "title": "Co-Head — Sociobotics Team",
+            "organization": "Sinhgad Techtonic",
+            "date": "Feb 2024",
+            "link": ""
+        }
+    ],
+    "certifications": [
+        {
+            "title": "Data Structures and Algorithms using Java",
+            "issuer": "NPTEL",
+            "details": "Silver Elite",
+            "date": "Oct 2024",
+            "link": ""
+        },
+        {
+            "title": "Back End Development and APIs",
+            "issuer": "FreeCodeCamp",
+            "details": "",
+            "date": "Jun 2025",
+            "link": ""
+        }
+    ],
+    "contact": {
+        "email": "bhaveshpatil7504@gmail.com",
+        "phone": "+91 7498503673",
+        "github": "",
+        "linkedin": "",
+        "leetcode": "",
+        "hackerrank": ""
+    }
+}
