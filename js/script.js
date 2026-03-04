@@ -165,6 +165,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
             }
+
+            // --- Projects Preview ---
+            if (data.projects && data.projects.length > 0) {
+                const grid = document.getElementById('projects-preview-grid');
+                if (grid) {
+                    const previewProjects = data.projects.slice(0, 3);
+                    grid.innerHTML = previewProjects.map(project => {
+                        const desc = project.description.length > 120
+                            ? project.description.substring(0, 120) + '…'
+                            : project.description;
+                        const chips = (project.tech || [])
+                            .map(t => `<span class="project-tech-chip">${t}</span>`)
+                            .join('');
+                        return `
+                            <article class="project-preview-card">
+                                <h3>${project.name}</h3>
+                                <p>${desc}</p>
+                                <div class="project-tech-chips">${chips}</div>
+                                <a href="#" class="project-explore-btn">Explore →</a>
+                            </article>`;
+                    }).join('');
+
+                    // Add magnetic hover to new cards
+                    if (typeof gsap !== 'undefined') {
+                        grid.querySelectorAll('.project-preview-card').forEach(el => {
+                            el.style.willChange = 'transform';
+                            el.addEventListener('mousemove', (e) => {
+                                const rect = el.getBoundingClientRect();
+                                const relX = (e.clientX - rect.left) / rect.width - 0.5;
+                                const relY = (e.clientY - rect.top) / rect.height - 0.5;
+                                gsap.to(el, { x: relX * 16, y: relY * 16, duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
+                            });
+                            el.addEventListener('mouseleave', () => {
+                                gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'power2.out', overwrite: 'auto' });
+                            });
+                        });
+                    }
+                }
+            }
         } catch (err) {
             console.warn('Portfolio data could not be loaded. Using fallback HTML content.', err);
         }
