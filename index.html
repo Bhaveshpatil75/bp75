@@ -17,10 +17,10 @@
     <!-- Cinematic Navigation -->
     <nav class="site-nav" id="site-nav">
         <div class="nav-links">
-            <a href="#about" class="nav-link" data-section="about">About</a>
-            <a href="#skills" class="nav-link" data-section="skills">Skills</a>
-            <a href="#projects" class="nav-link" data-section="projects">Projects</a>
-            <a href="#contact" class="nav-link" data-section="contact">Contact</a>
+            <a href="#skills-preview" class="nav-link" data-section="skills-preview">Skills</a>
+            <a href="#projects-preview" class="nav-link" data-section="projects-preview">Projects</a>
+            <a href="#experience" class="nav-link" data-section="experience">Experience</a>
+            <a href="#achievements" class="nav-link" data-section="achievements">Achievements</a>
             <span class="nav-indicator"></span>
         </div>
     </nav>
@@ -80,32 +80,17 @@
 
     <main>
         <!-- Interactive Skills Bubbles -->
-        <section class="skills-preview">
+        <section id="skills-preview" class="skills-preview">
             <div class="container">
                 <div class="skills-bubble-area" id="skills-bubble-area"></div>
-                <a href="#skills" class="ui-btn secondary skills-preview-btn">Explore Skills →</a>
             </div>
         </section>
 
         <!-- Projects Preview -->
-        <section class="projects-preview">
+        <section id="projects-preview" class="projects-preview">
             <div class="container">
                 <h2 class="section-title">Selected Works</h2>
                 <div class="projects-preview-grid" id="projects-preview-grid"></div>
-            </div>
-        </section>
-
-        <section id="about" class="about-section">
-            <div class="container">
-                <h2 class="section-title">About the Shadows</h2>
-                <div class="about-content">
-                    <p class="about-text">
-                        A digital craftsman operating in the subtle interplay between light and dark. Through meticulously designed interfaces and a careful study of typography, space, and contrast, I build web experiences that prioritize atmosphere and elegance over noise.
-                    </p>
-                    <p class="about-text">
-                        Believing that true premium design resides in restraint, my focus remains on minimal architecture and cinematic visual narratives that evoke mystery and calm.
-                    </p>
-                </div>
             </div>
         </section>
 
@@ -117,82 +102,16 @@
             </div>
         </section>
 
-        <section id="skills" class="skills-section">
+
+
+        <!-- Achievements Showcase -->
+        <section id="achievements" class="achievements-section">
             <div class="container">
-                <h2 class="section-title">Capabilities</h2>
-                <div class="skills-grid">
-                    <div class="skill-group">
-                        <h3 class="skill-heading">Design</h3>
-                        <ul class="skill-list">
-                            <li>Cinematic Direction</li>
-                            <li>Typography Systems</li>
-                            <li>Visual Hierarchy</li>
-                            <li>Minimalism</li>
-                        </ul>
-                    </div>
-                    <div class="skill-group">
-                        <h3 class="skill-heading">Engineering</h3>
-                        <ul class="skill-list">
-                            <li>Semantic HTML5</li>
-                            <li>Modern Vanilla CSS</li>
-                            <li>Vanilla JavaScript</li>
-                            <li>Responsive Architecture</li>
-                        </ul>
-                    </div>
-                     <div class="skill-group">
-                        <h3 class="skill-heading">Approach</h3>
-                        <ul class="skill-list">
-                            <li>Performance First</li>
-                            <li>Fluid Layouts</li>
-                            <li>Accessibility Minded</li>
-                            <li>Clean Code Structure</li>
-                        </ul>
-                    </div>
-                </div>
+                <h2 class="section-title">Achievements</h2>
+                <div class="metal-rack" id="metal-rack"></div>
             </div>
         </section>
 
-        <section id="projects" class="projects-section">
-        <div class="container">
-            <h2 class="section-title">Selected Works</h2>
-            
-            <div class="project-list">
-                <article class="project-panel">
-                    <div class="project-number">01</div>
-                    <div class="project-info">
-                        <h3 class="project-name">Echoes</h3>
-                        <p class="project-desc">A study in atmospheric soundscapes and visual silence.</p>
-                    </div>
-                </article>
-
-                <article class="project-panel">
-                    <div class="project-number">02</div>
-                    <div class="project-info">
-                        <h3 class="project-name">Vesper</h3>
-                        <p class="project-desc">Midnight interfaces for the modern web designed with deep charcoal.</p>
-                    </div>
-                </article>
-
-                <article class="project-panel">
-                    <div class="project-number">03</div>
-                    <div class="project-info">
-                        <h3 class="project-name">Lumina</h3>
-                        <p class="project-desc">Capturing the essence of light within the encompassing darkness.</p>
-                    </div>
-                </article>
-            </div>
-        </div>
-        </section>
-
-        <section id="contact" class="contact-section">
-            <div class="container">
-                <h2 class="section-title">Initiate Contact</h2>
-                <div class="contact-content">
-                    <p class="contact-desc">Let's craft the next narrative together in the quiet dark.</p>
-                    <a href="mailto:hello@example.com" class="contact-link">Reach out through the void</a>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Project Detail Modal -->

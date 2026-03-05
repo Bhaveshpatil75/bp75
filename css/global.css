@@ -1,0 +1,214 @@
+/* Color System & Variables */
+:root {
+    /* Deep noir background */
+    --bg-color: #0b0b0b;
+    /* Primary text color (faint grey/off-white for contrast but not harsh) */
+    --text-primary: #e0e0e0;
+    /* Secondary text / muted elements */
+    --text-secondary: #8c8c8c;
+    /* Charcoal tones for borders or subtle backgrounds */
+    --charcoal: #141414;
+    --charcoal-light: #1f1f1f;
+    /* Soft grey glow */
+    --glow-color: rgba(200, 200, 200, 0.08);
+
+    /* Typography */
+    --font-heading: 'Cormorant Garamond', serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0b0b0b;
+    /* Base Layer: Deep noir solid color */
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Ensure body establishes a positioning context and prevents overflow from scaled pseudo-elements */
+    position: relative;
+    min-height: 100vh;
+}
+
+body {
+
+    /* Canvas Polygon Background */
+    #polygon-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -3;
+        /* Behind content and vignette */
+        pointer-events: none;
+        /* Let clicks pass through */
+    }
+
+    /* Layer 2: Static Vignette Overlay */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* Keep vignette to maintain the deep cinematic framing */
+        background: radial-gradient(circle at center, transparent 35%, #000000 110%);
+        z-index: -2;
+        pointer-events: none;
+    }
+
+    /* Typography elements */
+    h1,
+    h2,
+    h3 {
+        font-family: var(--font-heading);
+        font-weight: 400;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 6vw;
+    }
+
+/* --- Responsive Layout --- */
+html,
+body {
+    overflow-x: hidden;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    body .container {
+        padding: 0 5vw;
+    }
+
+    body .hero-content {
+        gap: 1.2rem;
+    }
+
+    body .hero-spacer {
+        height: 6vh;
+    }
+
+    body .hero-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    body .skills-bubble-area {
+        height: 180px;
+    }
+
+    body .projects-preview {
+        padding: 4rem 0;
+    }
+
+    body .projects-preview-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    
+
+    
+
+    body .section-title {
+        margin-bottom: 3rem;
+        font-size: clamp(1.6rem, 4vw, 2.5rem);
+    }
+
+    
+
+    .nav-links {
+        gap: 1.5rem;
+    }
+}
+
+/* Small Tablet / Large Phone */
+@media (max-width: 600px) {
+    body .hero-title {
+        font-size: clamp(2.5rem, 10vw, 4rem);
+    }
+
+    body .hero-tagline {
+        font-size: clamp(0.75rem, 2vw, 1rem);
+        letter-spacing: 0.1em;
+    }
+
+    body .hero-subtitle {
+        max-width: 90%;
+    }
+
+    body .hero-avatar {
+        width: clamp(100px, 20vw, 140px);
+    }
+
+    body .skills-bubble-area {
+        height: 160px;
+        max-width: 100%;
+    }
+
+    body .project-preview-card {
+        padding: 1.5rem 1.4rem;
+    }
+
+    body .project-name {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+    }
+
+    
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    body .container {
+        padding: 0 4vw;
+    }
+
+    body .hero-content {
+        gap: 1rem;
+    }
+
+    body .hero-btn {
+        font-size: 0.7rem;
+        padding: 0.6rem 1.4rem;
+    }
+
+    body .skills-bubble-area {
+        height: 140px;
+    }
+
+    
+
+    
+
+    body .section-title {
+        margin-bottom: 2rem;
+    }
+
+    
+
+    
+
+    
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .nav-link {
+        font-size: 0.7rem;
+    }
+}
+

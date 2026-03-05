@@ -244,6 +244,70 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
+
+            // --- Achievements Showcase ---
+            if (data.achievements && data.achievements.length > 0) {
+                const metalRack = document.getElementById('metal-rack');
+
+                if (metalRack) {
+                    // Expose achievements for modal access
+                    window._portfolioAchievements = data.achievements;
+
+                    const trophySvg = `<svg class="trophy-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1a5.01 5.01 0 0 0 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>`;
+
+                    // Fixed configuration: 3 tops, 2 bottom
+                    const topTrophies = data.achievements.slice(0, 3);
+                    const bottomTrophies = data.achievements.slice(3, 5);
+
+                    const generateTrophies = (items, startIndex) => items.map((ach, i) => `
+                        <div class="trophy-item" data-ach-index="${startIndex + i}">
+                            <div class="trophy-icon-wrapper">
+                                ${trophySvg}
+                            </div>
+                        </div>
+                    `).join('');
+
+                    metalRack.innerHTML = `
+                        <div class="cabinet-back-wall"></div>
+                        <div class="cabinet-ceiling"></div>
+                        <div class="cabinet-floor"></div>
+                        <div class="cabinet-left-wall"></div>
+                        <div class="cabinet-right-wall"></div>
+                        
+                        <div class="metal-shelf-3d top-shelf">
+                            <div class="shelf-face top"></div>
+                            <div class="shelf-face bottom"></div>
+                            <div class="shelf-face front"></div>
+                            <div class="metal-shelf-content">
+                                ${generateTrophies(topTrophies, 0)}
+                            </div>
+                        </div>
+                        <div class="metal-shelf-3d bottom-shelf">
+                            <div class="shelf-face top"></div>
+                            <div class="shelf-face bottom"></div>
+                            <div class="shelf-face front"></div>
+                            <div class="metal-shelf-content">
+                                ${generateTrophies(bottomTrophies, 3)}
+                            </div>
+                        </div>
+                    `;
+
+                    // Optional subtle intro animation if gsap is loaded
+                    if (typeof gsap !== 'undefined') {
+                        gsap.from('.trophy-item', {
+                            scrollTrigger: {
+                                trigger: '.achievements-section',
+                                start: 'top 80%',
+                            },
+                            y: 30,
+                            opacity: 0,
+                            duration: 0.8,
+                            stagger: 0.1,
+                            ease: 'power3.out'
+                        });
+                    }
+                }
+            }
         } catch (err) {
             console.warn('Portfolio data could not be loaded. Using fallback HTML content.', err);
         }
@@ -342,6 +406,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalOverlay.classList.add('is-open');
                 document.body.style.overflow = 'hidden';
             }
+            return;
+        }
+
+        // Achievement Trophy Items
+        const trophyItem = e.target.closest('.trophy-item[data-ach-index]');
+        if (trophyItem) {
+            e.preventDefault();
+            const index = parseInt(trophyItem.dataset.achIndex, 10);
+            const achs = window._portfolioAchievements;
+            if (!isNaN(index) && achs && achs[index]) {
+                const ach = achs[index];
+                modalTitle.textContent = ach.title;
+                modalDesc.textContent = ach.organization;
+
+                modalTech.innerHTML = ach.date ? `<span class="project-tech-chip">${ach.date}</span>` : '';
+
+                let btns = '';
+                if (ach.link) btns += `<a href="${ach.link}" class="ui-btn secondary modal-btn" target="_blank">View Certificate</a>`;
+                modalActions.innerHTML = btns;
+
+                modalOverlay.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            }
         }
     });
 
@@ -398,52 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-        // Sections to reveal on scroll
-        const revealSections = document.querySelectorAll(
-            '.about-section, .skills-section, .projects-section, .contact-section'
-        );
 
-        revealSections.forEach((section) => {
-            // Use autoAlpha (combines opacity + visibility) to prevent layout shift
-            // visibility:hidden reserves space, opacity:0 alone would too, but autoAlpha
-            // cleanly toggles visibility:visible when opacity > 0
-            gsap.set(section, { autoAlpha: 0, y: 40, scale: 0.96 });
-
-            gsap.to(section, {
-                autoAlpha: 1,
-                y: 0,
-                scale: 1,
-                duration: 1.4,
-                ease: 'power2.out',
-                scrollTrigger: {
-                    trigger: section,
-                    start: 'top 78%',
-                    end: 'bottom 20%',
-                    toggleActions: 'play reverse play reverse'
-                }
-            });
-        });
-
-        // Staggered reveal for project panels
-        const projectPanels = document.querySelectorAll('.project-panel');
-        if (projectPanels.length > 0) {
-            gsap.set(projectPanels, { autoAlpha: 0, y: 40, scale: 0.96 });
-
-            gsap.to(projectPanels, {
-                autoAlpha: 1,
-                y: 0,
-                scale: 1,
-                duration: 1.4,
-                ease: 'power2.out',
-                stagger: 0.3,
-                scrollTrigger: {
-                    trigger: '.project-list',
-                    start: 'top 78%',
-                    end: 'bottom 20%',
-                    toggleActions: 'play reverse play reverse'
-                }
-            });
-        }
     }
     // --- Cinematic Hero Scroll Depth (Subtle Parallax) ---
     // Three layers at slightly different scroll speeds create depth illusion.
