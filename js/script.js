@@ -168,10 +168,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // --- Projects Preview ---
             if (data.projects && data.projects.length > 0) {
+                // Store projects globally for modal access
+                window._portfolioProjects = data.projects;
+
                 const grid = document.getElementById('projects-preview-grid');
                 if (grid) {
                     const previewProjects = data.projects.slice(0, 3);
-                    grid.innerHTML = previewProjects.map(project => {
+                    grid.innerHTML = previewProjects.map((project, i) => {
                         const desc = project.description.length > 120
                             ? project.description.substring(0, 120) + '…'
                             : project.description;
@@ -179,11 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             .map(t => `<span class="project-tech-chip">${t}</span>`)
                             .join('');
                         return `
-                            <article class="project-preview-card">
+                            <article class="project-preview-card" data-project-index="${i}" style="cursor:pointer">
                                 <h3>${project.name}</h3>
                                 <p>${desc}</p>
                                 <div class="project-tech-chips">${chips}</div>
-                                <a href="#" class="project-explore-btn">Explore →</a>
+                                <span class="ui-btn secondary ui-btn-sm project-explore-btn">Explore →</span>
                             </article>`;
                     }).join('');
 
@@ -204,12 +207,143 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
+
+            // --- Experience Timeline ---
+            if (data.experience && data.experience.length > 0) {
+                window._portfolioExperience = data.experience;
+
+                const timeline = document.getElementById('experience-timeline');
+                if (timeline) {
+                    timeline.innerHTML = data.experience.map((exp, i) => `
+                        <div class="timeline-entry" data-exp-index="${i}">
+                            <div class="timeline-node"></div>
+                            <div class="timeline-card">
+                                <span class="timeline-role">${exp.role}</span>
+                                <span class="timeline-company">${exp.company}</span>
+                                <span class="timeline-duration">${exp.duration}</span>
+                                <span class="ui-btn secondary ui-btn-sm timeline-explore">Explore →</span>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Scroll animations for timeline entries
+                    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                        timeline.querySelectorAll('.timeline-entry').forEach((entry, i) => {
+                            gsap.from(entry, {
+                                y: 30,
+                                opacity: 0,
+                                duration: 0.8,
+                                ease: 'power2.out',
+                                scrollTrigger: {
+                                    trigger: entry,
+                                    start: 'top 85%',
+                                    toggleActions: 'play reverse play reverse'
+                                }
+                            });
+                        });
+                    }
+                }
+            }
         } catch (err) {
             console.warn('Portfolio data could not be loaded. Using fallback HTML content.', err);
         }
     }
 
     loadPortfolioData();
+
+    // --- Project Detail Modal System ---
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalPanel = document.getElementById('modal-panel');
+    const modalClose = document.getElementById('modal-close');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalTech = document.getElementById('modal-tech');
+    const modalActions = document.getElementById('modal-actions');
+
+    function openModal(index) {
+        const projects = window._portfolioProjects;
+        if (!projects || !projects[index]) return;
+        const project = projects[index];
+
+        modalTitle.textContent = project.name;
+        modalDesc.textContent = project.description;
+
+        // Tech chips
+        modalTech.innerHTML = (project.tech || [])
+            .map(t => `<span class="project-tech-chip">${t}</span>`)
+            .join('');
+
+        // Action buttons — only show if link exists
+        let buttonsHtml = '';
+        if (project.demo) buttonsHtml += `<a href="${project.demo}" class="ui-btn secondary modal-btn" target="_blank">Live Demo</a>`;
+        if (project.github) buttonsHtml += `<a href="${project.github}" class="ui-btn secondary modal-btn" target="_blank">GitHub Repository</a>`;
+        modalActions.innerHTML = buttonsHtml;
+
+        modalOverlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('is-open');
+        document.body.style.overflow = '';
+    }
+
+    // Close button
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+
+    // Click outside panel
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+    }
+
+    // ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
+            closeModal();
+        }
+    });
+
+    // Delegate card clicks — whole card opens modal
+    document.addEventListener('click', (e) => {
+        // Project cards
+        const projectCard = e.target.closest('.project-preview-card[data-project-index]');
+        if (projectCard) {
+            e.preventDefault();
+            const index = parseInt(projectCard.dataset.projectIndex, 10);
+            if (!isNaN(index)) openModal(index);
+            return;
+        }
+
+        // Experience timeline cards
+        const expEntry = e.target.closest('.timeline-entry[data-exp-index]');
+        if (expEntry) {
+            e.preventDefault();
+            const index = parseInt(expEntry.dataset.expIndex, 10);
+            const exps = window._portfolioExperience;
+            if (!isNaN(index) && exps && exps[index]) {
+                const exp = exps[index];
+                modalTitle.textContent = exp.role;
+                modalDesc.textContent = exp.description;
+
+                // Show company + duration as tech-style chips
+                modalTech.innerHTML = `
+                    <span class="project-tech-chip">${exp.company}</span>
+                    <span class="project-tech-chip">${exp.duration}</span>
+                `;
+
+                // Certificate & company link buttons
+                let btns = '';
+                if (exp.links && exp.links.certificate) btns += `<a href="${exp.links.certificate}" class="ui-btn secondary modal-btn" target="_blank">Certificate</a>`;
+                if (exp.links && exp.links.company) btns += `<a href="${exp.links.company}" class="ui-btn secondary modal-btn" target="_blank">Company</a>`;
+                modalActions.innerHTML = btns;
+
+                modalOverlay.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+    });
 
     // Select Hero elements
     const heroTitle = document.querySelector('.hero-title');

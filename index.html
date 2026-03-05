@@ -72,7 +72,7 @@
                 </svg>
             </div>
             <div class="hero-actions">
-                <a href="#" class="hero-btn" id="btn-view-resume" target="_blank">View Resume</a>
+                <a href="#" class="ui-btn primary hero-btn" id="btn-view-resume" target="_blank">View Resume</a>
             </div>
         </div>
         <div class="hero-spacer"></div>
@@ -83,7 +83,7 @@
         <section class="skills-preview">
             <div class="container">
                 <div class="skills-bubble-area" id="skills-bubble-area"></div>
-                <a href="#skills" class="skills-preview-btn">Explore Skills →</a>
+                <a href="#skills" class="ui-btn secondary skills-preview-btn">Explore Skills →</a>
             </div>
         </section>
 
@@ -106,6 +106,14 @@
                         Believing that true premium design resides in restraint, my focus remains on minimal architecture and cinematic visual narratives that evoke mystery and calm.
                     </p>
                 </div>
+            </div>
+        </section>
+
+        <!-- Experience Timeline -->
+        <section id="experience" class="experience-section">
+            <div class="container">
+                <h2 class="section-title">Experience</h2>
+                <div class="timeline" id="experience-timeline"></div>
             </div>
         </section>
 
@@ -186,6 +194,17 @@
             </div>
         </section>
     </main>
+
+    <!-- Project Detail Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-panel" id="modal-panel">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <h2 class="modal-title" id="modal-title"></h2>
+            <p class="modal-desc" id="modal-desc"></p>
+            <div class="modal-tech" id="modal-tech"></div>
+            <div class="modal-actions" id="modal-actions"></div>
+        </div>
+    </div>
 
     <!-- GSAP for cinematic animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

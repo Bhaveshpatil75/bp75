@@ -138,6 +138,49 @@ body {
         padding: 0 6vw;
     }
 
+    /* --- Unified Button System --- */
+    .ui-btn {
+        display: inline-block;
+        font-family: var(--font-body);
+        font-size: 0.78rem;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-primary);
+        text-decoration: none;
+        padding: 0.65rem 1.6rem;
+        border: 1px solid rgba(80, 80, 80, 0.25);
+        border-radius: 6px;
+        background: var(--charcoal);
+        cursor: pointer;
+        transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    }
+
+    .ui-btn:hover {
+        background: #1a1a1a;
+        border-color: rgba(120, 120, 120, 0.3);
+        box-shadow: 0 0 15px rgba(200, 200, 200, 0.04);
+    }
+
+
+
+    .ui-btn.secondary {
+        background: transparent;
+        border-color: rgba(80, 80, 80, 0.2);
+        color: var(--text-secondary);
+    }
+
+    .ui-btn.secondary:hover {
+        background: transparent;
+        border-color: rgba(120, 120, 120, 0.3);
+        color: var(--text-primary);
+    }
+
+    .ui-btn-sm {
+        font-size: 0.7rem;
+        padding: 0.5rem 1.2rem;
+    }
+
     /* Hero Section */
     .hero {
         height: 100vh;
@@ -187,35 +230,11 @@ body {
         margin-top: 0.5rem;
     }
 
+    /* Hero buttons extend .ui-btn */
     .hero-btn {
-        display: inline-block;
-        font-family: var(--font-body);
         font-size: 0.8rem;
-        font-weight: 400;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--text-primary);
-        text-decoration: none;
         padding: 0.7rem 1.8rem;
-        border: 1px solid var(--charcoal-light);
-        background: var(--charcoal);
-        transition: background 0.3s ease, border-color 0.3s ease;
-    }
-
-    .hero-btn:hover {
-        background: #1a1a1a;
-        border-color: #333;
-    }
-
-    .hero-btn-outline {
-        background: transparent;
-        border-color: var(--text-secondary);
-        color: var(--text-secondary);
-    }
-
-    .hero-btn-outline:hover {
-        border-color: var(--text-primary);
-        color: var(--text-primary);
+        letter-spacing: 0.12em;
     }
 
     .hero-avatar {
@@ -296,18 +315,9 @@ body {
         z-index: 10;
     }
 
+    /* Skills preview button extends .ui-btn.secondary */
     .skills-preview-btn {
-        font-family: var(--font-body);
-        font-size: 0.75rem;
-        text-transform: uppercase;
         letter-spacing: 0.15em;
-        color: var(--text-secondary);
-        text-decoration: none;
-        transition: color 0.3s ease;
-    }
-
-    .skills-preview-btn:hover {
-        color: var(--text-primary);
     }
 
     /* Projects Preview */
@@ -319,6 +329,7 @@ body {
         display: grid;
         grid-template-columns: 1fr;
         gap: 1.5rem;
+        align-items: start;
     }
 
     @media (min-width: 768px) {
@@ -366,6 +377,22 @@ body {
         display: flex;
         flex-wrap: wrap;
         gap: 0.4rem;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: opacity 0.4s ease, max-height 0.4s ease;
+    }
+
+    .project-preview-card:hover .project-tech-chips {
+        opacity: 1;
+        max-height: 80px;
+    }
+
+    @media (max-width: 768px) {
+        .project-tech-chips {
+            opacity: 1;
+            max-height: none;
+        }
     }
 
     .project-tech-chip {
@@ -379,20 +406,9 @@ body {
         background: transparent;
     }
 
+    /* Project card explore button extends .ui-btn.secondary .ui-btn-sm */
     .project-explore-btn {
-        display: inline-block;
-        font-family: var(--font-body);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--text-secondary);
-        text-decoration: none;
         margin-top: auto;
-        transition: color 0.3s ease;
-    }
-
-    .project-explore-btn:hover {
-        color: var(--text-primary);
     }
 
     .section-title {
@@ -483,6 +499,109 @@ body {
         line-height: 1.8;
     }
 
+    /* Experience Timeline */
+    .experience-section {
+        padding: 8rem 0;
+    }
+
+    .timeline {
+        position: relative;
+        padding: 2rem 0;
+    }
+
+    /* Centered vertical line */
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: var(--charcoal-light);
+        z-index: 0;
+    }
+
+    .timeline-entry {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 4rem;
+        z-index: 1;
+        width: 100%;
+        padding: 0;
+    }
+
+    /* Timeline node (circle) */
+    .timeline-node {
+        position: relative;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--charcoal);
+        border: 1px solid var(--charcoal-light);
+        box-shadow: 0 0 10px rgba(200, 200, 200, 0.06);
+        margin-bottom: 2rem;
+        z-index: 2;
+        left: 0;
+        top: 0;
+    }
+
+    /* Timeline card */
+    .timeline-card {
+        background: var(--charcoal);
+        border: 1px solid rgba(80, 80, 80, 0.15);
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.8rem;
+        width: 100%;
+        max-width: 600px;
+        box-shadow:
+            0 0 20px rgba(200, 200, 200, 0.02),
+            0 0 6px rgba(200, 200, 200, 0.015);
+        transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+        cursor: pointer;
+    }
+
+    .timeline-card:hover {
+        background-color: #161616;
+        border-color: rgba(120, 120, 120, 0.2);
+        box-shadow:
+            0 0 40px rgba(200, 200, 200, 0.045),
+            0 0 12px rgba(200, 200, 200, 0.03),
+            inset 0 1px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .timeline-role {
+        font-family: var(--font-heading);
+        font-size: 1.3rem;
+        color: var(--text-primary);
+        font-weight: 400;
+    }
+
+    .timeline-company {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        letter-spacing: 0.04em;
+    }
+
+    .timeline-duration {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        opacity: 0.6;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    /* Timeline explore extends .ui-btn.secondary .ui-btn-sm */
+    .timeline-explore {
+        margin-top: 0.4rem;
+    }
+
     /* Skills Section */
     .skills-section {
         padding: 8rem 0;
@@ -563,6 +682,106 @@ body {
     .contact-link:hover {
         color: #ffffff;
         border-color: #ffffff;
+    }
+
+    /* --- Project Detail Modal --- */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .modal-overlay.is-open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-panel {
+        position: relative;
+        background: var(--charcoal);
+        border: 1px solid rgba(80, 80, 80, 0.15);
+        padding: 3rem 2.5rem;
+        max-width: 600px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        box-shadow:
+            0 0 60px rgba(200, 200, 200, 0.04),
+            0 0 15px rgba(200, 200, 200, 0.025),
+            inset 0 1px 20px rgba(0, 0, 0, 0.3);
+        transform: scale(0.95) translateY(10px);
+        opacity: 0;
+        transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    .modal-overlay.is-open .modal-panel {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    .modal-close {
+        position: sticky;
+        top: 0;
+        align-self: flex-end;
+        background: var(--charcoal);
+        border: none;
+        color: var(--text-secondary);
+        font-size: 1.8rem;
+        cursor: pointer;
+        line-height: 1;
+        z-index: 2;
+        margin: -1.5rem -1rem 0 0;
+        padding: 0.3rem;
+        transition: color 0.3s ease;
+    }
+
+    .modal-close:hover {
+        color: var(--text-primary);
+    }
+
+    .modal-title {
+        font-family: var(--font-heading);
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        color: var(--text-primary);
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        padding-right: 2rem;
+    }
+
+    .modal-desc {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+    }
+
+    .modal-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    /* Modal buttons extend .ui-btn.secondary */
+    .modal-btn {
+        padding: 0.6rem 1.5rem;
     }
 }
 
