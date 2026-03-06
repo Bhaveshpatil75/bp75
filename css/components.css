@@ -6,17 +6,24 @@
     width: 100%;
     z-index: 100;
     padding: 1.5rem 0;
-    background: rgba(11, 11, 11, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease, padding 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
     opacity: 0;
     transform: translateY(-10px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
 }
 
-.site-nav.is-visible {
+.site-nav.is-scrolled {
     opacity: 1;
     transform: translateY(0);
+    pointer-events: auto;
+    background: rgba(11, 11, 11, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .nav-links {
@@ -50,152 +57,149 @@
     height: 1px;
     width: 0;
     background-color: var(--text-secondary);
-    transition: none;
-    /* GSAP handles movement */
+    transition: left 0.3s ease-out, width 0.3s ease-out;
     pointer-events: none;
 }
 
 /* --- Unified Button System --- */
-    .ui-btn {
-        display: inline-block;
-        font-family: var(--font-body);
-        font-size: 0.78rem;
-        font-weight: 400;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: var(--text-primary);
-        text-decoration: none;
-        padding: 0.65rem 1.6rem;
-        border: 1px solid rgba(80, 80, 80, 0.25);
-        border-radius: 6px;
-        background: var(--charcoal);
-        cursor: pointer;
-        transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-    }
-
-    .ui-btn:hover {
-        background: #1a1a1a;
-        border-color: rgba(120, 120, 120, 0.3);
-        box-shadow: 0 0 15px rgba(200, 200, 200, 0.04);
-    }
-
-
-
-    .ui-btn.secondary {
-        background: transparent;
-        border-color: rgba(80, 80, 80, 0.2);
-        color: var(--text-secondary);
-    }
-
-    .ui-btn.secondary:hover {
-        background: transparent;
-        border-color: rgba(120, 120, 120, 0.3);
-        color: var(--text-primary);
-    }
-
-    .ui-btn-sm {
-        font-size: 0.7rem;
-        padding: 0.5rem 1.2rem;
-    }
-
-/* --- Project Detail Modal --- */
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        z-index: 200;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.4s ease, visibility 0.4s ease;
-    }
-
-    .modal-overlay.is-open {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .modal-panel {
-        position: relative;
-        background: var(--charcoal);
-        border: 1px solid rgba(80, 80, 80, 0.15);
-        padding: 3rem 2.5rem;
-        max-width: 600px;
-        width: 90%;
-        max-height: 85vh;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 1.2rem;
-        box-shadow:
-            0 0 60px rgba(200, 200, 200, 0.04),
-            0 0 15px rgba(200, 200, 200, 0.025),
-            inset 0 1px 20px rgba(0, 0, 0, 0.3);
-        transform: scale(0.95) translateY(10px);
-        opacity: 0;
-        transition: transform 0.4s ease, opacity 0.4s ease;
-    }
-
-    .modal-overlay.is-open .modal-panel {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-    }
-
-    .modal-close {
-        position: sticky;
-        top: 0;
-        align-self: flex-end;
-        background: var(--charcoal);
-        border: none;
-        color: var(--text-secondary);
-        font-size: 1.8rem;
-        cursor: pointer;
-        line-height: 1;
-        z-index: 2;
-        margin: -1.5rem -1rem 0 0;
-        padding: 0.3rem;
-        transition: color 0.3s ease;
-    }
-
-    .modal-close:hover {
-        color: var(--text-primary);
-    }
-
-    .modal-title {
-        font-family: var(--font-heading);
-        font-size: clamp(1.8rem, 4vw, 2.5rem);
-        color: var(--text-primary);
-        font-weight: 400;
-        letter-spacing: 0.02em;
-        padding-right: 2rem;
-    }
-
-    .modal-desc {
-        font-size: 0.95rem;
-        color: var(--text-secondary);
-        line-height: 1.7;
-    }
-
-    .modal-tech {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-    }
-
-    .modal-actions {
-        display: flex;
-        gap: 1rem;
-        margin-top: 0.5rem;
-        flex-wrap: wrap;
-    }
-
-    /* Modal buttons extend .ui-btn.secondary */
-    .modal-btn {
-        padding: 0.6rem 1.5rem;
-    }
+.ui-btn {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 0.65rem 1.6rem;
+    border: 1px solid rgba(80, 80, 80, 0.25);
+    border-radius: 6px;
+    background: var(--charcoal);
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
+.ui-btn:hover {
+    background: #1a1a1a;
+    border-color: rgba(120, 120, 120, 0.3);
+    box-shadow: 0 0 15px rgba(200, 200, 200, 0.04);
+}
+
+
+
+.ui-btn.secondary {
+    background: transparent;
+    border-color: rgba(80, 80, 80, 0.2);
+    color: var(--text-secondary);
+}
+
+.ui-btn.secondary:hover {
+    background: transparent;
+    border-color: rgba(120, 120, 120, 0.3);
+    color: var(--text-primary);
+}
+
+.ui-btn-sm {
+    font-size: 0.7rem;
+    padding: 0.5rem 1.2rem;
+}
+
+/* --- Project Detail Modal --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.modal-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-panel {
+    position: relative;
+    background: var(--charcoal);
+    border: 1px solid rgba(80, 80, 80, 0.15);
+    padding: 3rem 2.5rem;
+    max-width: 600px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    box-shadow:
+        0 0 60px rgba(200, 200, 200, 0.04),
+        0 0 15px rgba(200, 200, 200, 0.025),
+        inset 0 1px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.modal-overlay.is-open .modal-panel {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.modal-close {
+    position: sticky;
+    top: 0;
+    align-self: flex-end;
+    background: var(--charcoal);
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 2;
+    margin: -1.5rem -1rem 0 0;
+    padding: 0.3rem;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    color: var(--text-primary);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    padding-right: 2rem;
+}
+
+.modal-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.modal-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Modal buttons extend .ui-btn.secondary */
+.modal-btn {
+    padding: 0.6rem 1.5rem;
+}

@@ -829,12 +829,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (siteNav && navLinks.length > 0 && navIndicator) {
 
-            // --- 1. Show/hide nav based on scroll past hero ---
-            ScrollTrigger.create({
-                trigger: '.hero',
-                start: 'bottom 20%',
-                onEnterBack: () => siteNav.classList.remove('is-visible'),
-                onLeave: () => siteNav.classList.add('is-visible')
+            // --- 1. Show/hide glass nav background based on scroll ---
+            const heroSection = document.querySelector('.hero');
+            window.addEventListener('scroll', () => {
+                const showThreshold = heroSection ? heroSection.offsetHeight * 0.8 : window.innerHeight * 0.8;
+                if (window.scrollY > showThreshold) {
+                    siteNav.classList.add('is-scrolled');
+                } else {
+                    siteNav.classList.remove('is-scrolled');
+                }
             });
 
             // --- 2. Move indicator to active link ---
@@ -843,28 +846,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 const linkRect = link.getBoundingClientRect();
                 const containerRect = navLinksContainer.getBoundingClientRect();
 
-                gsap.to(navIndicator, {
-                    left: linkRect.left - containerRect.left,
-                    width: linkRect.width,
-                    duration: 0.5,
-                    ease: 'power2.out'
-                });
+                // Use CSS transitions instead of GSAP for the indicator
+                navIndicator.style.left = `${linkRect.left - containerRect.left}px`;
+                navIndicator.style.width = `${linkRect.width}px`;
             }
 
-            // --- 3. Active section detection via ScrollTrigger ---
-            const sectionIds = ['about', 'skills', 'projects', 'contact'];
+            // --- 3. Active section detection via IntersectionObserver ---
+            const sectionIds = ['skills-preview', 'projects-preview', 'experience', 'achievements'];
+
+            // IntersectionObserver properly identifies when a section spans the viewport
+            // Adjusted margins trigger the indicator slightly earlier
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -60% 0px',
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setActiveLink(entry.target.id);
+                    }
+                });
+            }, observerOptions);
 
             sectionIds.forEach((id) => {
                 const section = document.getElementById(id);
-                if (!section) return;
-
-                ScrollTrigger.create({
-                    trigger: section,
-                    start: 'top 50%',
-                    end: 'bottom 50%',
-                    onEnter: () => setActiveLink(id),
-                    onEnterBack: () => setActiveLink(id)
-                });
+                if (section) observer.observe(section);
             });
 
             function setActiveLink(sectionId) {
@@ -876,6 +884,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // Update indicator on resize to maintain correct position
+            window.addEventListener('resize', () => {
+                const activeLink = document.querySelector('.nav-link.is-active');
+                if (activeLink) moveIndicator(activeLink);
+            });
+
             // --- 4. Smooth scroll on click ---
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
@@ -883,8 +897,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const targetId = link.getAttribute('data-section');
                     const targetSection = document.getElementById(targetId);
                     if (targetSection) {
+                        const navHeight = siteNav.classList.contains('is-scrolled') ? siteNav.offsetHeight : 80;
                         gsap.to(window, {
-                            scrollTo: { y: targetSection, offsetY: 60 },
+                            scrollTo: { y: targetSection, offsetY: navHeight },
                             duration: 1.2,
                             ease: 'power2.inOut'
                         });
