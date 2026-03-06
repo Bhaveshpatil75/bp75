@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Failed to load data');
             const data = await response.json();
 
+            // Expose globally for the terminal
+            window._portfolioData = data;
+
             // Hero content
             const heroName = document.getElementById('hero-name');
             const heroTitle = document.getElementById('hero-title');
@@ -852,7 +855,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // --- 3. Active section detection via IntersectionObserver ---
-            const sectionIds = ['skills-preview', 'projects-preview', 'experience', 'achievements'];
+            const sectionIds = ['skills-preview', 'projects-preview', 'experience', 'achievements', 'contact'];
 
             // IntersectionObserver properly identifies when a section spans the viewport
             // Adjusted margins trigger the indicator slightly earlier
@@ -906,6 +909,161 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             });
+        }
+    }
+
+    // --- Interactive Terminal System ---
+    const terminalInput = document.getElementById('terminal-input');
+    const terminalOutput = document.getElementById('terminal-output');
+    const terminalBody = document.getElementById('terminal-body');
+    const terminalInputLine = document.getElementById('terminal-input-line');
+    const terminalInputMirror = document.getElementById('terminal-input-mirror');
+
+    if (terminalInput && terminalOutput && terminalBody && terminalInputLine && terminalInputMirror) {
+
+        // Typing Animation Sequence
+        const startupLines = [
+            "Connecting to Bhavesh's system...",
+            "Access granted.",
+            "Type 'help' to begin."
+        ];
+
+        let lineIndex = 0;
+        let charIndex = 0;
+
+        function typeStartupSequence() {
+            if (lineIndex < startupLines.length) {
+                if (charIndex === 0) {
+                    // Create new line
+                    const tempDiv = document.createElement('div');
+                    tempDiv.className = 'terminal-sysmsg';
+                    tempDiv.id = `startup-line-${lineIndex}`;
+                    terminalOutput.appendChild(tempDiv);
+                }
+
+                const currentLineEl = document.getElementById(`startup-line-${lineIndex}`);
+                if (charIndex < startupLines[lineIndex].length) {
+                    currentLineEl.textContent += startupLines[lineIndex].charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeStartupSequence, Math.random() * 30 + 20); // Random typing speed
+                } else {
+                    // Line finished, go to next
+                    lineIndex++;
+                    charIndex = 0;
+                    setTimeout(typeStartupSequence, 300); // Pause between lines
+                }
+                // Scroll down
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            } else {
+                // Done with typing, show input line
+                terminalInputLine.style.display = 'flex';
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+                terminalInput.focus();
+            }
+        }
+
+        // Start animation immediately (or you could observe the section)
+        setTimeout(typeStartupSequence, 500);
+
+        // Sync hidden input to the visual mirror span
+        terminalInput.addEventListener('input', () => {
+            terminalInputMirror.textContent = terminalInput.value;
+        });
+
+        // Ensure click anywhere on terminal focuses the input
+        terminalBody.addEventListener('click', () => {
+            // Only focus if typing is done
+            if (terminalInputLine.style.display === 'flex') {
+                terminalInput.focus();
+            }
+        });
+
+        terminalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = terminalInput.value.trim().toLowerCase();
+
+                // Clear input early to make it feel responsive
+                terminalInput.value = '';
+                terminalInputMirror.textContent = '';
+
+                if (command === 'clear') {
+                    // Remove command history but keep startup banner
+                    Array.from(terminalOutput.children).forEach(child => {
+                        if (!child.classList.contains('terminal-sysmsg')) {
+                            child.remove();
+                        }
+                    });
+
+                    // Auto-scroll to top of new cleared view
+                    terminalBody.scrollTop = 0;
+                    return;
+                }
+
+                if (command !== '') {
+                    // Print the typed command to output exactly as prompt looks
+                    printToTerminal(`<div class="cmd-line"><span class="terminal-prompt">bhavesh@portfolio:~$</span><span class="cmd">${command}</span></div>`);
+                    processCommand(command);
+                } else {
+                    // Just print empty prompt line
+                    printToTerminal(`<div class="cmd-line"><span class="terminal-prompt">bhavesh@portfolio:~$</span></div>`);
+                }
+            }
+        });
+
+        function printToTerminal(htmlString) {
+            const tempDiv = document.createElement('div');
+            tempDiv.className = 'terminal-history-item';
+            tempDiv.innerHTML = htmlString;
+            terminalOutput.appendChild(tempDiv);
+
+            // Auto-scroll to bottom
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        function processCommand(cmd) {
+            const data = window._portfolioData || {};
+            const contactInfo = data.contact || {
+                email: 'bhaveshpatil7504@gmail.com',
+                phone: '+91 7498503673',
+                github: 'https://github.com/Bhaveshpatil75',
+                linkedin: 'https://www.linkedin.com/in/bhavesh-patil-a2668b213/'
+            };
+            const resumeLink = (data.resume && data.resume.file) ? data.resume.file : 'assets/resume/Bhavesh_Patil_Resume.pdf';
+
+            switch (cmd) {
+                case 'help':
+                    printToTerminal(`<span class="out">Available commands:</span>
+<span class="out">help     - Display available commands.</span>
+<span class="out">contact  - Show email and phone.</span>
+<span class="out">github   - Open GitHub profile in a new tab.</span>
+<span class="out">linkedin - Open LinkedIn profile in a new tab.</span>
+<span class="out">resume   - Open resume in new tab.</span>
+<span class="out">clear    - Clear terminal screen.</span>`);
+                    break;
+                case 'contact':
+                    printToTerminal(`<span class="out">Email: ${contactInfo.email}</span>
+<span class="out">Phone: ${contactInfo.phone}</span>`);
+                    break;
+                case 'github':
+                    printToTerminal(`<span class="out">Opening GitHub profile...</span>`);
+                    setTimeout(() => window.open(contactInfo.github, '_blank'), 400);
+                    break;
+                case 'linkedin':
+                    printToTerminal(`<span class="out">Opening LinkedIn profile...</span>`);
+                    setTimeout(() => window.open(contactInfo.linkedin, '_blank'), 400);
+                    break;
+                case 'resume':
+                    printToTerminal(`<span class="out">Opening resume...</span>`);
+                    setTimeout(() => window.open(resumeLink, '_blank'), 400);
+                    break;
+                case 'sudo':
+                case 'su':
+                    printToTerminal(`<span class="out">bhavesh is not in the sudoers file. This incident will be reported.</span>`);
+                    break;
+                default:
+                    printToTerminal(`<span class="out">bash: ${cmd}: command not found</span>`);
+                    break;
+            }
         }
     }
 });

@@ -21,6 +21,7 @@
             <a href="#projects-preview" class="nav-link" data-section="projects-preview">Projects</a>
             <a href="#experience" class="nav-link" data-section="experience">Experience</a>
             <a href="#achievements" class="nav-link" data-section="achievements">Achievements</a>
+            <a href="#contact" class="nav-link" data-section="contact">Contact</a>
             <span class="nav-indicator"></span>
         </div>
     </nav>
@@ -109,6 +110,33 @@
             <div class="container">
                 <h2 class="section-title">Achievements</h2>
                 <div class="metal-rack" id="metal-rack"></div>
+            </div>
+        </section>
+
+        <!-- Terminal Contact Section -->
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <h2 class="section-title">Contact</h2>
+                <div class="terminal-container terminal-console">
+                    <div class="terminal-header">
+                        <div class="terminal-btn close"></div>
+                        <div class="terminal-btn minimize"></div>
+                        <div class="terminal-btn maximize"></div>
+                        <span class="terminal-title">bhavesh@portfolio:~</span>
+                    </div>
+                    <div class="terminal-body" id="terminal-body">
+                        <div class="terminal-output" id="terminal-output">
+                            <!-- Typing animation and history will appear here -->
+                        </div>
+                        <div class="terminal-input-line" id="terminal-input-line" style="display: none;">
+                            <span class="terminal-prompt">bhavesh@portfolio:~$</span>
+                            <div class="terminal-input-wrapper">
+                                <span id="terminal-input-mirror" class="terminal-input-mirror"></span><span class="terminal-cursor"></span>
+                                <input type="text" id="terminal-input" class="terminal-hidden-input" autocomplete="off" spellcheck="false">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
