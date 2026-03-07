@@ -1,636 +1,786 @@
 /* Hero Section */
-    .hero {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        position: relative;
-        padding: 0 6vw;
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 0 6vw;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.hero-title {
+    font-size: clamp(4rem, 12vw, 9rem);
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.hero-tagline {
+    font-size: clamp(0.9rem, 2vw, 1.25rem);
+    color: var(--text-secondary);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    max-width: 600px;
+}
+
+.hero-subtitle {
+    font-size: clamp(0.8rem, 1.7vw, 1.1rem);
+    color: var(--text-secondary);
+    font-style: italic;
+    font-family: var(--font-heading);
+    opacity: 0.7;
+    max-width: 500px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+/* Hero buttons extend .ui-btn */
+.hero-btn {
+    font-size: 0.8rem;
+    padding: 0.7rem 1.8rem;
+    letter-spacing: 0.12em;
+}
+
+.hero-avatar {
+    width: clamp(200px, 20vw, 280px);
+    margin-top: 1.5rem;
+    opacity: 0.85;
+    animation: avatarBreathe 4s ease-in-out infinite;
+}
+
+.hero-avatar svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+}
+
+#left-eye,
+#left-eye-left,
+#left-eye-right,
+#right-eye,
+#right-eye-left,
+#right-eye-right {
+    transform-origin: center;
+    transition: transform 0.15s ease-out;
+}
+
+@keyframes avatarBreathe {
+
+    0%,
+    100% {
+        transform: translateY(0);
     }
 
-    .hero-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
+    50% {
+        transform: translateY(-3px);
     }
+}
 
-    .hero-title {
-        font-size: clamp(4rem, 12vw, 9rem);
-        letter-spacing: 0.05em;
-        color: #ffffff;
-        line-height: 1;
-    }
-
-    .hero-tagline {
-        font-size: clamp(0.9rem, 2vw, 1.25rem);
-        color: var(--text-secondary);
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        max-width: 600px;
-    }
-
-    .hero-subtitle {
-        font-size: clamp(0.8rem, 1.7vw, 1.1rem);
-        color: var(--text-secondary);
-        font-style: italic;
-        font-family: var(--font-heading);
-        opacity: 0.7;
-        max-width: 500px;
-    }
-
-    .hero-actions {
-        display: flex;
-        gap: 1.2rem;
-        margin-top: 0.5rem;
-    }
-
-    /* Hero buttons extend .ui-btn */
-    .hero-btn {
-        font-size: 0.8rem;
-        padding: 0.7rem 1.8rem;
-        letter-spacing: 0.12em;
-    }
-
-    .hero-avatar {
-        width: clamp(120px, 14vw, 180px);
-        margin-top: 1.5rem;
-        opacity: 0.55;
-    }
-
-    .hero-avatar svg {
-        width: 100%;
-        height: auto;
-    }
-
-    .hero-spacer {
-        /* Subtle empty space below for future cinematic intro animation */
-        height: 12vh;
-    }
+.hero-spacer {
+    /* Subtle empty space below for future cinematic intro animation */
+    height: 12vh;
+}
 
 /* Interactive Skills Bubbles */
-    .skills-preview {
-        padding: 2.5rem 0;
-        border-bottom: 1px solid var(--charcoal-light);
-    }
+.skills-preview {
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--charcoal-light);
+}
 
-    .skills-preview .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1.2rem;
-    }
+.skills-preview .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+}
 
-    .skills-bubble-area {
-        position: relative;
-        width: 100%;
-        max-width: 700px;
-        height: 220px;
-        border: 1px solid var(--charcoal-light);
-        border-radius: 12px;
-        background: rgba(14, 14, 14, 0.6);
-        overflow: hidden;
-    }
+.skills-bubble-area {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    height: 220px;
+    border: 1px solid var(--charcoal-light);
+    border-radius: 12px;
+    background: rgba(14, 14, 14, 0.6);
+    overflow: hidden;
+}
 
-    .skill-bubble {
-        position: absolute;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        background: var(--charcoal);
-        border: 1px solid var(--charcoal-light);
-        color: var(--text-secondary);
-        font-family: var(--font-body);
-        font-size: 0.7rem;
-        font-weight: 400;
-        letter-spacing: 0.04em;
-        text-align: center;
-        cursor: grab;
-        user-select: none;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-    }
+.skill-bubble {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--charcoal);
+    border: 1px solid var(--charcoal-light);
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-align: center;
+    cursor: grab;
+    user-select: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
 
-    .skill-bubble:hover {
-        color: var(--text-primary);
-        border-color: #333;
-        box-shadow: 0 0 15px rgba(200, 200, 200, 0.06);
-    }
+.skill-bubble:hover {
+    color: var(--text-primary);
+    border-color: #333;
+    box-shadow: 0 0 15px rgba(200, 200, 200, 0.06);
+}
 
-    .skill-bubble.is-dragging {
-        cursor: grabbing;
-        border-color: #444;
-        box-shadow: 0 0 20px rgba(200, 200, 200, 0.08);
-        transition: none;
-        z-index: 10;
-    }
+.skill-bubble.is-dragging {
+    cursor: grabbing;
+    border-color: #444;
+    box-shadow: 0 0 20px rgba(200, 200, 200, 0.08);
+    transition: none;
+    z-index: 10;
+}
 
-    /* Skills preview button extends .ui-btn.secondary */
-    .skills-preview-btn {
-        letter-spacing: 0.15em;
-    }
+/* Skills preview button extends .ui-btn.secondary */
+.skills-preview-btn {
+    letter-spacing: 0.15em;
+}
 
-    /* Projects Preview */
-    .projects-preview {
-        padding: 5rem 0;
-    }
+/* Projects Preview */
+.projects-preview {
+    padding: 5rem 0;
+}
 
-    .projects-preview-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        align-items: start;
-    }
+.projects-preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+    position: relative;
+    padding-bottom: 2rem;
+}
 
-    @media (min-width: 768px) {
-        .projects-preview-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
+/* Glass Capsule Base Pill */
+.glass-capsule {
+    position: relative;
+    width: 250px;
+    /* Closed Width */
+    height: 70px;
+    /* Closed Height */
+    border-radius: 50px;
+    background: rgba(15, 15, 15, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(255, 255, 255, 0.02);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        height 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        border-radius 0.6s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
+}
 
-    .project-preview-card {
-        background: var(--charcoal);
-        border: 1px solid rgba(80, 80, 80, 0.15);
-        padding: 2rem 1.8rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        box-shadow:
-            0 0 20px rgba(200, 200, 200, 0.02),
-            0 0 6px rgba(200, 200, 200, 0.015);
-        transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.5s ease;
-    }
+.glass-capsule:hover {
+    width: 420px;
+    /* Opened Width */
+    height: 300px;
+    /* Opened Height */
+    border-radius: 20px;
+    border-color: rgba(255, 255, 255, 0.2);
+    /* Subtle white glow on highlight */
+    box-shadow: 0 10px 40px rgba(255, 255, 255, 0.05), inset 0 0 20px rgba(255, 255, 255, 0.04);
+}
 
-    .project-preview-card:hover {
-        background-color: #161616;
-        border-color: rgba(120, 120, 120, 0.2);
-        box-shadow:
-            0 0 40px rgba(200, 200, 200, 0.045),
-            0 0 12px rgba(200, 200, 200, 0.03),
-            0 0 2px rgba(200, 200, 200, 0.02),
-            inset 0 1px 15px rgba(0, 0, 0, 0.3);
-    }
+/* Inner Layers */
+.capsule-closed {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    opacity: 1;
+}
 
-    .project-preview-card h3 {
-        font-size: 1.4rem;
-        color: var(--text-primary);
-        line-height: 1.2;
-    }
+.capsule-closed h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 400;
+}
 
-    .project-preview-card p {
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-        line-height: 1.6;
-    }
+.capsule-open {
+    position: absolute;
+    inset: 0;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: linear-gradient(135deg, rgba(20, 20, 25, 0.7) 0%, rgba(10, 10, 10, 0.8) 100%);
+}
 
-    .project-tech-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        opacity: 0;
-        max-height: 0;
-        overflow: hidden;
-        transition: opacity 0.4s ease, max-height 0.4s ease;
-    }
+.capsule-content-fade {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+}
 
-    .project-preview-card:hover .project-tech-chips {
-        opacity: 1;
-        max-height: 80px;
-    }
+.glass-capsule:hover .capsule-closed {
+    opacity: 0;
+}
 
-    @media (max-width: 768px) {
-        .project-tech-chips {
-            opacity: 1;
-            max-height: none;
-        }
-    }
+.glass-capsule:hover .capsule-open {
+    opacity: 1;
+    pointer-events: auto;
+}
 
-    .project-tech-chip {
-        font-family: var(--font-body);
-        font-size: 0.65rem;
-        color: var(--text-secondary);
-        letter-spacing: 0.04em;
-        padding: 0.25rem 0.65rem;
-        border: 1px solid var(--charcoal-light);
-        border-radius: 12px;
-        background: transparent;
-    }
+/* Delay content reveal slightly until capsule partially opens */
+.glass-capsule:hover .capsule-content-fade {
+    opacity: 1;
+    transform: translateY(0);
+}
 
-    /* Project card explore button extends .ui-btn.secondary .ui-btn-sm */
-    .project-explore-btn {
-        margin-top: auto;
-    }
+.capsule-open h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+    color: #fff;
+}
 
-    .section-title {
-        font-size: clamp(2rem, 4vw, 3rem);
-        color: var(--text-secondary);
-        margin-bottom: 5rem;
-        border-bottom: 1px solid var(--charcoal-light);
-        padding-bottom: 1.5rem;
+.capsule-open p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Reuse chip logic & reposition explore button inside capsule */
+.glass-capsule .project-tech-chips {
+    margin-bottom: 1.5rem;
+}
+
+.glass-capsule .project-explore-btn {
+    align-self: flex-start;
+}
+
+@media (max-width: 768px) {
+    .glass-capsule:hover {
+        width: 90vw;
+        height: 350px;
+        /* Allow extra vertical room for words on mobile */
     }
+}
+
+.project-tech-chip {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid var(--charcoal-light);
+    border-radius: 12px;
+    background: transparent;
+}
+
+/* Project card explore button extends .ui-btn.secondary .ui-btn-sm */
+.project-explore-btn {
+    margin-top: auto;
+}
+
+.section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--text-secondary);
+    margin-bottom: 5rem;
+    border-bottom: 1px solid var(--charcoal-light);
+    padding-bottom: 1.5rem;
+}
 
 /* Experience Timeline */
-    .experience-section {
-        padding: 8rem 0;
-    }
+.experience-section {
+    padding: 8rem 0;
+}
 
-    .timeline {
-        position: relative;
-        padding: 2rem 0;
-    }
+.timeline {
+    position: relative;
+    padding: 2rem 0;
+}
 
-    /* Centered vertical line */
-    .timeline::before {
-        content: '';
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: 0;
-        bottom: 0;
-        width: 1px;
-        background: var(--charcoal-light);
-        z-index: 0;
-    }
+.career-pathway {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    padding: 2rem 0;
+    gap: 2rem;
+}
 
-    .timeline-entry {
-        position: relative;
-        display: flex;
+/* Base glowing line connecting milestones */
+.pathway-line {
+    position: absolute;
+    top: 50px;
+    /* Align to center of node cards */
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 0;
+    --pathway-progress: 100%;
+    /* Overridden by GSAP logic */
+}
+
+/* Animating filled line over the base track */
+.pathway-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--pathway-progress);
+    background: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
+    z-index: 1;
+}
+
+.pathway-node {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    min-width: 200px;
+    background: var(--charcoal);
+    border: 1px solid rgba(80, 80, 80, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    height: 100px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease,
+        background-color 0.4s ease;
+}
+
+.pathway-node:hover {
+    height: 280px;
+    /* Expand downward */
+    transform: translateY(-5px);
+    background: #161616;
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 15px rgba(255, 255, 255, 0.05);
+}
+
+.node-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.node-role {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    font-weight: 400;
+}
+
+.node-company {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.node-duration {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.node-expanded {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* Fill space to push button down */
+}
+
+.pathway-node:hover .node-expanded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.node-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 1.2rem;
+}
+
+.timeline-explore {
+    align-self: flex-start;
+    margin-top: 0;
+}
+
+/* Mobile responsive pathway shift */
+@media (max-width: 768px) {
+    .career-pathway {
         flex-direction: column;
-        align-items: center;
-        margin-bottom: 4rem;
-        z-index: 1;
-        width: 100%;
-        padding: 0;
-    }
-
-    /* Timeline node (circle) */
-    .timeline-node {
-        position: relative;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: var(--charcoal);
-        border: 1px solid var(--charcoal-light);
-        box-shadow: 0 0 10px rgba(200, 200, 200, 0.06);
-        margin-bottom: 2rem;
-        z-index: 2;
-        left: 0;
-        top: 0;
-    }
-
-    /* Timeline card */
-    .timeline-card {
-        background: var(--charcoal);
-        border: 1px solid rgba(80, 80, 80, 0.15);
-        padding: 2.5rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 0.8rem;
-        width: 100%;
-        max-width: 600px;
-        box-shadow:
-            0 0 20px rgba(200, 200, 200, 0.02),
-            0 0 6px rgba(200, 200, 200, 0.015);
-        transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
-        cursor: pointer;
-    }
-
-    .timeline-card:hover {
-        background-color: #161616;
-        border-color: rgba(120, 120, 120, 0.2);
-        box-shadow:
-            0 0 40px rgba(200, 200, 200, 0.045),
-            0 0 12px rgba(200, 200, 200, 0.03),
-            inset 0 1px 15px rgba(0, 0, 0, 0.3);
-    }
-
-    .timeline-role {
-        font-family: var(--font-heading);
-        font-size: 1.3rem;
-        color: var(--text-primary);
-        font-weight: 400;
-    }
-
-    .timeline-company {
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-        letter-spacing: 0.04em;
-    }
-
-    .timeline-duration {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-        opacity: 0.6;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-    }
-
-    /* Timeline explore extends .ui-btn.secondary .ui-btn-sm */
-    .timeline-explore {
-        margin-top: 0.4rem;
-    }
-
-    /* Achievements Constellation */
-    .achievements-section {
-        padding: 8rem 0;
-    }
-
-    /* Metal Display Rack Wrapper (True 3D Physics Box) */
-    .achievements-section .container {
-        perspective: 1500px;
-        perspective-origin: 50% -100px;
-        /* Slight angle down to see the floor */
-    }
-
-    .metal-rack {
-        width: 100%;
-        max-width: 900px;
-        margin: 0 auto;
-        border: 2px solid rgba(255, 255, 255, 0.15);
-        /* Match sketch lines */
-        border-radius: 2px;
-        position: relative;
-        transform-style: preserve-3d;
-        padding-top: 14rem;
-        /* Give plenty of headroom for top shelf trophies */
-        padding-bottom: 4rem;
-        /* Give room underneath bottom shelf */
-        pointer-events: none;
-        /* Let clicks pass through empty space in Z=0 plane */
-    }
-
-    /* Cabinet 3D Walls */
-    .cabinet-back-wall {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        transform: translateZ(-200px);
-        background: #08080a;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .cabinet-left-wall {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 200px;
-        transform-origin: left center;
-        transform: rotateY(90deg);
-        background: linear-gradient(to right, #1a1a1e, #08080a);
-        border-right: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .cabinet-right-wall {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 200px;
-        transform-origin: right center;
-        transform: rotateY(-90deg);
-        background: linear-gradient(to left, #1a1a1e, #08080a);
-        border-left: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .cabinet-ceiling {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 200px;
-        transform-origin: top center;
-        transform: rotateX(-90deg);
-        background: linear-gradient(to bottom, #101014, #08080a);
-    }
-
-    .cabinet-floor {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 200px;
-        transform-origin: bottom center;
-        transform: rotateX(90deg);
-        background: linear-gradient(to top, #101014, #08080a);
-    }
-
-    /* Shelf True 3D Cuboids */
-    .metal-shelf-3d {
-        width: 100%;
-        height: 16px;
-        position: relative;
-        transform-style: preserve-3d;
-        z-index: 5;
-        pointer-events: none;
-    }
-
-    .metal-shelf-3d.top-shelf {
-        margin-bottom: 14rem;
-        /* Ample space between shelves so trophies don't clip */
-    }
-
-    .metal-shelf-3d.bottom-shelf {
-        margin-bottom: 4rem;
-        /* Realistic floor space */
-    }
-
-    .shelf-face {
-        position: absolute;
-        pointer-events: none;
-    }
-
-    .shelf-face.front {
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #111114;
-        transform: translateZ(0);
-        border-top: 1px solid rgba(255, 255, 255, 0.4);
-        border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-        border-left: 1px solid rgba(255, 255, 255, 0.25);
-        border-right: 1px solid rgba(255, 255, 255, 0.25);
-    }
-
-    .shelf-face.top {
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 200px;
-        /* Exact same physical depth as side walls */
-        background: linear-gradient(to top, #1e1e24, #0d0d10);
-        transform-origin: top center;
-        transform: rotateX(-90deg);
-        border-left: 1px solid rgba(255, 255, 255, 0.2);
-        /* Side seam */
-        border-right: 1px solid rgba(255, 255, 255, 0.2);
-        /* Side seam */
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        /* Back seam where it touches back wall */
-    }
-
-    .shelf-face.bottom {
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 200px;
-        /* Visible if camera looks up */
-        background: #000;
-        transform-origin: bottom center;
-        transform: rotateX(90deg);
-        border-left: 1px solid rgba(255, 255, 255, 0.1);
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-        border-top: 1px solid rgba(255, 255, 255, 0.15);
-        /* Back under-seam */
-    }
-
-    /* Content Area holding the Grid */
-    .metal-shelf-content {
-        position: absolute;
-        bottom: 100%;
-        /* Sits exactly on top of shelf front edge */
-        left: 0;
-        width: 100%;
-        transform-style: preserve-3d;
-        transform: translateZ(-100px);
-        /* Center trophies exactly midway down the 200px depth shelf */
-        display: grid;
-        pointer-events: none;
-    }
-
-    /* Top Shelf Layout */
-    .metal-shelf-3d.top-shelf .metal-shelf-content {
-        grid-template-columns: repeat(3, 240px);
-        justify-content: center;
-        gap: 2rem;
-    }
-
-    /* Bottom Shelf Layout */
-    .metal-shelf-3d.bottom-shelf .metal-shelf-content {
-        grid-template-columns: repeat(2, 300px);
-        justify-content: center;
+        align-items: stretch;
         gap: 3rem;
     }
 
-    /* Trophy Items */
-    .trophy-item {
-        display: flex;
-        align-items: flex-end;
-        /* Push items to the baseline */
-        justify-content: center;
+    .pathway-line {
+        top: 0;
+        left: 20px;
+        /* Shift to left tracking edge */
+        height: 100%;
+        width: 2px;
+        --pathway-progress: 100%;
+    }
+
+    .pathway-line::after {
+        height: var(--pathway-progress);
+        /* Swap to vertical drawing */
         width: 100%;
-        cursor: pointer;
-        padding-bottom: 0px;
-        pointer-events: auto;
-        /* Enable clicking on trophies */
     }
 
-    .trophy-text-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        margin-bottom: 1.5rem;
-        /* Push away from icon */
-        align-self: end;
-        /* Sit at the bottom of the top grid cell */
+    .pathway-node {
+        margin-left: 50px;
+        /* Offset nodes from line on mobile */
+        width: auto;
+    }
+}
+
+/* Achievements Constellation */
+.achievements-section {
+    padding: 8rem 0;
+}
+
+/* Metal Display Rack Wrapper (True 3D Physics Box) */
+.achievements-section .container {
+    perspective: 1500px;
+    perspective-origin: 50% -100px;
+    /* Slight angle down to see the floor */
+}
+
+.metal-rack {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    /* Match sketch lines */
+    border-radius: 2px;
+    position: relative;
+    transform-style: preserve-3d;
+    padding-top: 14rem;
+    /* Give plenty of headroom for top shelf trophies */
+    padding-bottom: 4rem;
+    /* Give room underneath bottom shelf */
+    pointer-events: none;
+    /* Let clicks pass through empty space in Z=0 plane */
+}
+
+/* Cabinet 3D Walls */
+.cabinet-back-wall {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateZ(-200px);
+    background: #08080a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cabinet-left-wall {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    transform-origin: left center;
+    transform: rotateY(90deg);
+    background: linear-gradient(to right, #1a1a1e, #08080a);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cabinet-right-wall {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 200px;
+    transform-origin: right center;
+    transform: rotateY(-90deg);
+    background: linear-gradient(to left, #1a1a1e, #08080a);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cabinet-ceiling {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    transform-origin: top center;
+    transform: rotateX(-90deg);
+    background: linear-gradient(to bottom, #101014, #08080a);
+}
+
+.cabinet-floor {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    transform-origin: bottom center;
+    transform: rotateX(90deg);
+    background: linear-gradient(to top, #101014, #08080a);
+}
+
+/* Shelf True 3D Cuboids */
+.metal-shelf-3d {
+    width: 100%;
+    height: 16px;
+    position: relative;
+    transform-style: preserve-3d;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.metal-shelf-3d.top-shelf {
+    margin-bottom: 14rem;
+    /* Ample space between shelves so trophies don't clip */
+}
+
+.metal-shelf-3d.bottom-shelf {
+    margin-bottom: 4rem;
+    /* Realistic floor space */
+}
+
+.shelf-face {
+    position: absolute;
+    pointer-events: none;
+}
+
+.shelf-face.front {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #111114;
+    transform: translateZ(0);
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.shelf-face.top {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    /* Exact same physical depth as side walls */
+    background: linear-gradient(to top, #1e1e24, #0d0d10);
+    transform-origin: top center;
+    transform: rotateX(-90deg);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    /* Side seam */
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    /* Side seam */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    /* Back seam where it touches back wall */
+}
+
+.shelf-face.bottom {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    /* Visible if camera looks up */
+    background: #000;
+    transform-origin: bottom center;
+    transform: rotateX(90deg);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    /* Back under-seam */
+}
+
+/* Content Area holding the Grid */
+.metal-shelf-content {
+    position: absolute;
+    bottom: 100%;
+    /* Sits exactly on top of shelf front edge */
+    left: 0;
+    width: 100%;
+    transform-style: preserve-3d;
+    transform: translateZ(-100px);
+    /* Center trophies exactly midway down the 200px depth shelf */
+    display: grid;
+    pointer-events: none;
+}
+
+/* Top Shelf Layout */
+.metal-shelf-3d.top-shelf .metal-shelf-content {
+    grid-template-columns: repeat(3, 240px);
+    justify-content: center;
+    gap: 2rem;
+}
+
+/* Bottom Shelf Layout */
+.metal-shelf-3d.bottom-shelf .metal-shelf-content {
+    grid-template-columns: repeat(2, 300px);
+    justify-content: center;
+    gap: 3rem;
+}
+
+/* Trophy Items */
+.trophy-item {
+    display: flex;
+    align-items: flex-end;
+    /* Push items to the baseline */
+    justify-content: center;
+    width: 100%;
+    cursor: pointer;
+    padding-bottom: 0px;
+    pointer-events: auto;
+    /* Enable clicking on trophies */
+}
+
+.trophy-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    /* Push away from icon */
+    align-self: end;
+    /* Sit at the bottom of the top grid cell */
+}
+
+.trophy-icon-wrapper {
+    position: relative;
+    /* Push SVG physically down into shadow */
+    transform-style: preserve-3d;
+    /* Keep shadow in 3D plane */
+}
+
+.trophy-icon {
+    width: 130px;
+    height: 130px;
+    fill: rgba(230, 230, 240, 1);
+    position: relative;
+    z-index: 1;
+    /* Push trophy downward slightly to rest exactly where the shadow was centered */
+    transform: translateY(12px);
+}
+
+.trophy-title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.3;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.trophy-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+}
+
+.trophy-date {
+    font-size: 0.8rem;
+    color: var(--charcoal-lighter);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    display: block;
+    margin-top: 0.3rem;
+}
+
+/* Responsive grid collapse for mobile */
+@media (max-width: 768px) {
+
+    .cabinet-left-wall,
+    .cabinet-right-wall {
+        width: 100px;
     }
 
-    .trophy-icon-wrapper {
-        position: relative;
-        /* Push SVG physically down into shadow */
-        transform-style: preserve-3d;
-        /* Keep shadow in 3D plane */
+    .cabinet-back-wall {
+        transform: translateZ(-100px);
     }
 
-    .trophy-icon {
-        width: 130px;
-        height: 130px;
-        fill: rgba(230, 230, 240, 1);
-        position: relative;
-        z-index: 1;
-        /* Push trophy downward slightly to rest exactly where the shadow was centered */
-        transform: translateY(12px);
+    .cabinet-ceiling,
+    .cabinet-floor,
+    .shelf-face.top,
+    .shelf-face.bottom {
+        height: 100px;
     }
 
-    .trophy-title {
-        font-family: var(--font-heading);
-        font-size: 1.25rem;
-        color: var(--text-primary);
-        font-weight: 500;
-        line-height: 1.3;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    .metal-shelf-content {
+        transform: translateZ(-50px);
     }
 
-    .trophy-desc {
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-        letter-spacing: 0.03em;
-        line-height: 1.4;
+    .metal-shelf-3d.top-shelf .metal-shelf-content,
+    .metal-shelf-3d.bottom-shelf .metal-shelf-content {
+        grid-template-columns: 1fr;
+        gap: 4rem;
     }
 
-    .trophy-date {
-        font-size: 0.8rem;
-        color: var(--charcoal-lighter);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        font-weight: 500;
-        display: block;
-        margin-top: 0.3rem;
+    .metal-shelf-3d.top-shelf {
+        margin-bottom: 6rem;
     }
 
-    /* Responsive grid collapse for mobile */
-    @media (max-width: 768px) {
-
-        .cabinet-left-wall,
-        .cabinet-right-wall {
-            width: 100px;
-        }
-
-        .cabinet-back-wall {
-            transform: translateZ(-100px);
-        }
-
-        .cabinet-ceiling,
-        .cabinet-floor,
-        .shelf-face.top,
-        .shelf-face.bottom {
-            height: 100px;
-        }
-
-        .metal-shelf-content {
-            transform: translateZ(-50px);
-        }
-
-        .metal-shelf-3d.top-shelf .metal-shelf-content,
-        .metal-shelf-3d.bottom-shelf .metal-shelf-content {
-            grid-template-columns: 1fr;
-            gap: 4rem;
-        }
-
-        .metal-shelf-3d.top-shelf {
-            margin-bottom: 6rem;
-        }
-
-        /* Always show hover content on mobile */
-        .trophy-hover-content {
-            max-height: none;
-            opacity: 1;
-            margin-top: 0.5rem;
-        }
-
-        .trophy-item:hover {
-            transform: none;
-            /* Disable hover lift on mobile */
-        }
+    /* Always show hover content on mobile */
+    .trophy-hover-content {
+        max-height: none;
+        opacity: 1;
+        margin-top: 0.5rem;
     }
+
+    .trophy-item:hover {
+        transform: none;
+        /* Disable hover lift on mobile */
+    }
+}
 
 
 
@@ -645,7 +795,8 @@
     max-width: 800px;
     margin: 0 auto;
     background: #0a0a0a;
-    border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border for glass precision */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Subtle border for glass precision */
     border-radius: 8px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 15px rgba(200, 200, 200, 0.02);
     overflow: hidden;
@@ -667,16 +818,25 @@
     margin-right: 0.5rem;
 }
 
-.terminal-console .terminal-btn.close { background: #ff5f56; }
-.terminal-console .terminal-btn.minimize { background: #ffbd2e; }
-.terminal-console .terminal-btn.maximize { background: #27c93f; }
+.terminal-console .terminal-btn.close {
+    background: #ff5f56;
+}
+
+.terminal-console .terminal-btn.minimize {
+    background: #ffbd2e;
+}
+
+.terminal-console .terminal-btn.maximize {
+    background: #27c93f;
+}
 
 .terminal-console .terminal-title {
     color: #888;
     font-size: 0.8rem;
     text-align: center;
     flex-grow: 1;
-    margin-right: 3rem; /* Balance the buttons */
+    margin-right: 3rem;
+    /* Balance the buttons */
     font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important;
 }
 
@@ -744,8 +904,15 @@
 }
 
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
 }
 
 /* The actual input sits invisibly on top to capture typing */
@@ -794,4 +961,137 @@
         padding: 1rem;
         height: 300px;
     }
+}
+
+/* --- Certifications Digital Vault --- */
+.certifications-section {
+    padding: 8rem 0;
+}
+
+.vault-container {
+    width: 100%;
+    max-width: 800px;
+    /* Keep it constrained for a good drawer look */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem 0;
+}
+
+.vault-drawer {
+    width: 100%;
+    background: linear-gradient(to bottom, #1a1a1a, #0d0d0d);
+    border: 1px solid rgba(80, 80, 80, 0.3);
+    border-radius: 6px;
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    /* Metallic top edge highlight */
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vault-drawer:hover {
+    border-color: rgba(120, 120, 120, 0.4);
+    box-shadow:
+        0 12px 25px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.vault-drawer.is-open {
+    border-color: rgba(150, 150, 150, 0.5);
+}
+
+.vault-header {
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    background: transparent;
+    transition: background-color 0.3s ease;
+}
+
+.vault-header:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.vault-title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin: 0;
+}
+
+.vault-indicator {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vault-indicator svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.vault-drawer.is-open .vault-indicator {
+    transform: rotate(180deg);
+    color: var(--text-primary);
+}
+
+.vault-content {
+    max-height: 0;
+    /* Hidden by default */
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    background: #080808;
+    /* Slightly darker inside the drawer */
+    border-top: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.vault-drawer.is-open .vault-content {
+    max-height: 500px;
+    /* Generous height to allow content to slide down */
+    opacity: 1;
+}
+
+.vault-content-inner {
+    padding: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.vault-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.vault-issuer {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.vault-date {
+    font-size: 0.8rem;
+    color: var(--charcoal-lighter);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.vault-action {
+    flex-shrink: 0;
 }

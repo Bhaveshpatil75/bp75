@@ -3,6 +3,27 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Cinematic Noir Portfolio loaded.');
 
+    runCinematicLoader();
+
+    // --- Cinematic Loading Screen ---
+    function runCinematicLoader() {
+        const loaderOverlay = document.getElementById('signal-loader');
+
+        if (!loaderOverlay) {
+            return;
+        }
+
+        // Run the pulse animation for an appropriate minimal amount of time (~1.2s)
+        setTimeout(() => {
+            loaderOverlay.classList.add('is-hidden');
+
+            // Remove from DOM entirely after fade transition finishes
+            setTimeout(() => {
+                loaderOverlay.remove();
+            }, 800);
+        }, 1200);
+    }
+
     // --- Data Loader: Populate content from JSON ---
     async function loadPortfolioData() {
         try {
@@ -184,24 +205,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         const chips = (project.tech || [])
                             .map(t => `<span class="project-tech-chip">${t}</span>`)
                             .join('');
+
                         return `
-                            <article class="project-preview-card" data-project-index="${i}" style="cursor:pointer">
-                                <h3>${project.name}</h3>
-                                <p>${desc}</p>
-                                <div class="project-tech-chips">${chips}</div>
-                                <span class="ui-btn secondary ui-btn-sm project-explore-btn">Explore →</span>
-                            </article>`;
+                            <div class="glass-capsule" data-project-index="${i}">
+                                <div class="capsule-closed">
+                                    <h3>${project.name}</h3>
+                                </div>
+                                <div class="capsule-open">
+                                    <div class="capsule-content-fade">
+                                        <h3>${project.name}</h3>
+                                        <p>${desc}</p>
+                                        <div class="project-tech-chips">${chips}</div>
+                                        <span class="ui-btn secondary ui-btn-sm project-explore-btn">Explore →</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
                     }).join('');
 
-                    // Add magnetic hover to new cards
+                    // Add slight magnetic hover to capsules as requested by the overall cinematic vibe
                     if (typeof gsap !== 'undefined') {
-                        grid.querySelectorAll('.project-preview-card').forEach(el => {
+                        grid.querySelectorAll('.glass-capsule').forEach(el => {
                             el.style.willChange = 'transform';
                             el.addEventListener('mousemove', (e) => {
                                 const rect = el.getBoundingClientRect();
                                 const relX = (e.clientX - rect.left) / rect.width - 0.5;
                                 const relY = (e.clientY - rect.top) / rect.height - 0.5;
-                                gsap.to(el, { x: relX * 16, y: relY * 16, duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
+                                gsap.to(el, { x: relX * 10, y: relY * 10, duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
                             });
                             el.addEventListener('mouseleave', () => {
                                 gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'power2.out', overwrite: 'auto' });
@@ -211,40 +241,141 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // --- Experience Timeline ---
+            // --- Experience Pathway ---
             if (data.experience && data.experience.length > 0) {
                 window._portfolioExperience = data.experience;
 
                 const timeline = document.getElementById('experience-timeline');
                 if (timeline) {
-                    timeline.innerHTML = data.experience.map((exp, i) => `
-                        <div class="timeline-entry" data-exp-index="${i}">
-                            <div class="timeline-node"></div>
-                            <div class="timeline-card">
-                                <span class="timeline-role">${exp.role}</span>
-                                <span class="timeline-company">${exp.company}</span>
-                                <span class="timeline-duration">${exp.duration}</span>
-                                <span class="ui-btn secondary ui-btn-sm timeline-explore">Explore →</span>
+                    // Inject pathway HTML
+                    timeline.innerHTML = `
+                        <div class="career-pathway">
+                            <div class="pathway-line"></div>
+                            ${data.experience.map((exp, i) => `
+                                <div class="pathway-node timeline-entry" data-exp-index="${i}">
+                                    <div class="node-header">
+                                        <h3 class="node-role">${exp.role}</h3>
+                                        <span class="node-company">${exp.company}</span>
+                                        <span class="node-duration">${exp.duration}</span>
+                                    </div>
+                                    <div class="node-expanded">
+                                        <p class="node-desc">${exp.description.length > 100 ? exp.description.substring(0, 100) + '...' : exp.description}</p>
+                                        <span class="ui-btn secondary ui-btn-sm timeline-explore">Explore →</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+
+                    // Cinematic GSAP scroll animations for the Pathway track
+                    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                        const pathwayLine = timeline.querySelector('.pathway-line');
+                        const nodes = timeline.querySelectorAll('.pathway-node');
+
+                        const tl = gsap.timeline({
+                            scrollTrigger: {
+                                trigger: timeline,
+                                start: 'top 85%',
+                            }
+                        });
+
+                        // Draw track length
+                        tl.fromTo(pathwayLine,
+                            { '--pathway-progress': '0%' },
+                            { '--pathway-progress': '100%', duration: 1.2, ease: 'power2.inOut' }
+                        )
+                            // Stagger fade-in career nodes
+                            .from(nodes, {
+                                opacity: 0,
+                                y: 20,
+                                duration: 0.6,
+                                stagger: 0.2,
+                                ease: 'power2.out'
+                            }, "-=0.4");
+                    }
+                }
+            }
+
+            // --- Certifications Digital Vault ---
+            if (data.certifications && data.certifications.length > 0) {
+                const vaultContainer = document.getElementById('certifications-vault');
+                if (vaultContainer) {
+                    vaultContainer.innerHTML = data.certifications.map((cert, i) => `
+                        <div class="vault-drawer" data-cert-index="${i}">
+                            <div class="vault-header">
+                                <h3 class="vault-title">${cert.title || cert.name}</h3>
+                                <div class="vault-indicator">
+                                    <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                                </div>
+                            </div>
+                            <div class="vault-content">
+                                <div class="vault-content-inner">
+                                    <div class="vault-details">
+                                        <span class="vault-issuer">${cert.issuer || 'Issuing Organization'}</span>
+                                        <span class="vault-date">${cert.issued || cert.date || 'Year'}</span>
+                                    </div>
+                                    <div class="vault-action">
+                                        ${cert.link ? `<button data-cert-link="${cert.link}" class="ui-btn secondary ui-btn-sm btn-view-cert">View Certificate</button>` : `<span style="color:var(--text-secondary); font-size:0.8rem;">No file provided</span>`}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     `).join('');
 
-                    // Scroll animations for timeline entries
-                    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-                        timeline.querySelectorAll('.timeline-entry').forEach((entry, i) => {
-                            gsap.from(entry, {
-                                y: 30,
-                                opacity: 0,
-                                duration: 0.8,
-                                ease: 'power2.out',
-                                scrollTrigger: {
-                                    trigger: entry,
-                                    start: 'top 85%',
-                                    toggleActions: 'play reverse play reverse'
-                                }
+                    // Accordion Logic
+                    const headers = vaultContainer.querySelectorAll('.vault-header');
+                    headers.forEach(header => {
+                        header.addEventListener('click', () => {
+                            const drawer = header.parentElement;
+                            const isOpen = drawer.classList.contains('is-open');
+
+                            // Close all currently open drawers
+                            vaultContainer.querySelectorAll('.vault-drawer.is-open').forEach(openDrawer => {
+                                openDrawer.classList.remove('is-open');
                             });
+
+                            // If it wasn't open, open it
+                            if (!isOpen) {
+                                drawer.classList.add('is-open');
+                            }
                         });
-                    }
+                    });
+
+                    // Certificate Modal Logic
+                    const certModalOverlay = document.getElementById('cert-modal-overlay');
+                    const certModalClose = document.getElementById('cert-modal-close');
+                    const certIframe = document.getElementById('cert-iframe');
+                    const certModalTitle = document.getElementById('cert-modal-title');
+
+                    const openCertModal = (link, title) => {
+                        certIframe.src = link;
+                        certModalTitle.textContent = title;
+                        certModalOverlay.classList.add('is-open');
+                        document.body.style.overflow = 'hidden';
+                    };
+
+                    const closeCertModal = () => {
+                        certModalOverlay.classList.remove('is-open');
+                        setTimeout(() => { certIframe.src = ''; }, 300); // Clear after fade out
+                        document.body.style.overflow = '';
+                    };
+
+                    certModalClose?.addEventListener('click', closeCertModal);
+                    certModalOverlay?.addEventListener('click', (e) => {
+                        if (e.target === certModalOverlay) closeCertModal();
+                    });
+
+                    // Attach to view buttons
+                    vaultContainer.querySelectorAll('.btn-view-cert').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation(); // don't trigger accordion if clicking somehow
+                            const link = btn.getAttribute('data-cert-link');
+                            // Find the title from the DOM
+                            const titleEl = btn.closest('.vault-drawer').querySelector('.vault-title');
+                            const title = titleEl ? titleEl.textContent : 'Certificate Preview';
+                            openCertModal(link, title);
+                        });
+                    });
                 }
             }
 
@@ -293,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ${generateTrophies(bottomTrophies, 3)}
                             </div>
                         </div>
-                    `;
+                            `;
 
                     // Optional subtle intro animation if gsap is loaded
                     if (typeof gsap !== 'undefined') {
@@ -374,8 +505,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Delegate card clicks — whole card opens modal
     document.addEventListener('click', (e) => {
-        // Project cards
-        const projectCard = e.target.closest('.project-preview-card[data-project-index]');
+        // Project cards (now glass capsules)
+        const projectCard = e.target.closest('.glass-capsule[data-project-index]');
         if (projectCard) {
             e.preventDefault();
             const index = parseInt(projectCard.dataset.projectIndex, 10);
@@ -395,10 +526,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalDesc.textContent = exp.description;
 
                 // Show company + duration as tech-style chips
-                modalTech.innerHTML = `
-                    <span class="project-tech-chip">${exp.company}</span>
-                    <span class="project-tech-chip">${exp.duration}</span>
-                `;
+                modalTech.innerHTML = `<span class="project-tech-chip">${exp.company}</span>
+                                       <span class="project-tech-chip">${exp.duration}</span>`;
 
                 // Certificate & company link buttons
                 let btns = '';
@@ -526,6 +655,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
+    }
+
+    // --- Interactive Avatar Eye Tracking ---
+    const eyeParts = [
+        document.getElementById('left-eye'),
+        document.getElementById('left-eye-left'),
+        document.getElementById('left-eye-right'),
+        document.getElementById('right-eye'),
+        document.getElementById('right-eye-left'),
+        document.getElementById('right-eye-right')
+    ].filter(el => el !== null); // Only keep the parts that exist
+
+    const heroAvatarContainer = document.querySelector('.hero-avatar');
+
+    if (eyeParts.length > 0 && heroAvatarContainer) {
+        document.addEventListener('mousemove', (e) => {
+            const rect = heroAvatarContainer.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            // Calculate cursor offset from center of avatar
+            const deltaX = e.clientX - centerX;
+            const deltaY = e.clientY - centerY;
+
+            // Maximum displacement (px) - Increased significantly to make tracking obvious
+            const maxMoveX = 22;
+            const maxMoveY = 12;
+
+            // Simple distance factor based roughly on how close the cursor is
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            const strength = Math.min(distance / 500, 1); // Peak strength at 500px away 
+
+            let moveX = 0;
+            let moveY = 0;
+
+            if (distance > 0) {
+                // We use different X/Y max moves because eyes are typically wider than they are tall
+                moveX = (deltaX / distance) * (maxMoveX * strength);
+                moveY = (deltaY / distance) * (maxMoveY * strength);
+            }
+
+            // Move all parts of the eye
+            eyeParts.forEach(part => {
+                part.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+
+        // Reset eyes when cursor leaves the window bounds completely
+        document.body.addEventListener('mouseleave', () => {
+            eyeParts.forEach(part => {
+                part.style.transform = 'translate(0px, 0px)';
+            });
+        });
     }
 
     // --- Dynamic Line-Intersection Polygon Mesh (Canvas) ---
@@ -855,7 +1037,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // --- 3. Active section detection via IntersectionObserver ---
-            const sectionIds = ['skills-preview', 'projects-preview', 'experience', 'achievements', 'contact'];
+            const sectionIds = ['skills-preview', 'projects-preview', 'experience', 'achievements', 'certifications', 'contact'];
 
             // IntersectionObserver properly identifies when a section spans the viewport
             // Adjusted margins trigger the indicator slightly earlier
@@ -930,6 +1112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let lineIndex = 0;
         let charIndex = 0;
+        let typingTimeout = null;
 
         function typeStartupSequence() {
             if (lineIndex < startupLines.length) {
@@ -945,12 +1128,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (charIndex < startupLines[lineIndex].length) {
                     currentLineEl.textContent += startupLines[lineIndex].charAt(charIndex);
                     charIndex++;
-                    setTimeout(typeStartupSequence, Math.random() * 30 + 20); // Random typing speed
+                    typingTimeout = setTimeout(typeStartupSequence, Math.random() * 30 + 20); // Random typing speed
                 } else {
                     // Line finished, go to next
                     lineIndex++;
                     charIndex = 0;
-                    setTimeout(typeStartupSequence, 300); // Pause between lines
+                    typingTimeout = setTimeout(typeStartupSequence, 300); // Pause between lines
                 }
                 // Scroll down
                 terminalBody.scrollTop = terminalBody.scrollHeight;
@@ -958,12 +1141,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Done with typing, show input line
                 terminalInputLine.style.display = 'flex';
                 terminalBody.scrollTop = terminalBody.scrollHeight;
-                terminalInput.focus();
+                // terminalInput.focus(); // Removed to prevent auto-scrolling on page load
             }
         }
 
-        // Start animation immediately (or you could observe the section)
-        setTimeout(typeStartupSequence, 500);
+        // Trigger on scroll via IntersectionObserver
+        const contactObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Check if user has entered any non-startup commands
+                    const hasUserCommands = Array.from(terminalOutput.children).some(
+                        child => !child.classList.contains('terminal-sysmsg')
+                    );
+
+                    if (!hasUserCommands) {
+                        // Reset the typing state
+                        clearTimeout(typingTimeout);
+                        terminalOutput.innerHTML = '';
+                        terminalInputLine.style.display = 'none';
+                        lineIndex = 0;
+                        charIndex = 0;
+                        typeStartupSequence();
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+            contactObserver.observe(contactSection);
+        }
 
         // Sync hidden input to the visual mirror span
         terminalInput.addEventListener('input', () => {
